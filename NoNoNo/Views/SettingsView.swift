@@ -56,6 +56,9 @@ struct SettingsView: View {
                     Text("He said “no no no,” but he was smiling, so we shipped it.")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Text("And then he said goddamnit.")
+                        .font(.caption.italic())
+                        .foregroundColor(.secondary)
                 }
             }
             .navigationTitle("Settings")
