@@ -51,7 +51,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .dodTravel: return "✈️"
         case .hoa: return "🏘️"
         case .thatSong: return "🎵"
-        case .kids: return "🧒"
+        case .kids: return "👶"
         case .newDriver: return "🔰"
         case .switchGame: return "🎮"
         case .maiTai: return "🍹"
@@ -77,14 +77,13 @@ enum TargetKind: String, CaseIterable, Equatable {
     /// these need words, an emoji alone doesn't land the joke.
     var caption: String? {
         switch self {
-        case .pineapplePizza: return "PINEAPPLE PIZZA"
         case .shannon: return "SHANNON L."
         case .badDrivers: return "DRIVERS"
         case .dodTravel: return "DOD TRAVEL"
         case .hoa: return "THE HOA"
         case .thatSong: return "THAT SONG"
         case .kids: return "KIDS"
-        case .newDriver: return "NEW DRIVER"
+        case .newDriver: return "STUDENT DRIVER"
         default: return nil
         }
     }

@@ -202,6 +202,31 @@ struct TargetView: View {
                                     : Color(red: 0.05, green: 0.45, blue: 0.28),
                                     lineWidth: 3)
                 )
+            targetFace
+        }
+        .frame(width: 83, height: 83)
+        .contentShape(Circle())
+        .scaleEffect(appeared ? 1 : 0.3)
+        .onAppear {
+            withAnimation(.spring(response: 0.25, dampingFraction: 0.5)) { appeared = true }
+        }
+        .accessibilityLabel(kind.label)
+        .accessibilityIdentifier("target-\(kind.rawValue)")
+    }
+
+    @ViewBuilder
+    private var targetFace: some View {
+        switch kind {
+        case .newDriver:
+            StudentDriverSticker()
+        case .kids:
+            VStack(spacing: -2) {
+                SwaddledBaby()
+                Text("KIDS")
+                    .font(.system(size: 10, weight: .black, design: .rounded))
+                    .foregroundColor(.black)
+            }
+        default:
             if let caption = kind.caption {
                 VStack(spacing: -1) {
                     Text(kind.emoji).font(.system(size: 31))
@@ -216,14 +241,46 @@ struct TargetView: View {
                 Text(kind.emoji).font(.system(size: 44))
             }
         }
-        .frame(width: 83, height: 83)
-        .contentShape(Circle())
-        .scaleEffect(appeared ? 1 : 0.3)
-        .onAppear {
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.5)) { appeared = true }
+    }
+}
+
+/// The yellow menace itself.
+struct StudentDriverSticker: View {
+    var body: some View {
+        VStack(spacing: -1) {
+            Text("STUDENT")
+            Text("DRIVER")
         }
-        .accessibilityLabel(kind.label)
-        .accessibilityIdentifier("target-\(kind.rawValue)")
+        .font(.system(size: 11, weight: .black, design: .rounded))
+        .foregroundColor(.black)
+        .padding(.vertical, 5)
+        .padding(.horizontal, 7)
+        .background(RoundedRectangle(cornerRadius: 5).fill(Color(red: 1.0, green: 0.84, blue: 0.10)))
+        .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
+        .rotationEffect(.degrees(-6))
+    }
+}
+
+/// A baby, swaddled. Menace level: brunch.
+struct SwaddledBaby: View {
+    var body: some View {
+        VStack(spacing: -8) {
+            Text("👶").font(.system(size: 24))
+            RoundedRectangle(cornerRadius: 11)
+                .fill(Color(red: 0.66, green: 0.85, blue: 0.95))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 11).stroke(.black, lineWidth: 1.5)
+                )
+                .overlay(
+                    // Blanket wrap line
+                    Path { path in
+                        path.move(to: CGPoint(x: 4, y: 8))
+                        path.addLine(to: CGPoint(x: 30, y: 20))
+                    }
+                    .stroke(.black.opacity(0.35), lineWidth: 1.5)
+                )
+                .frame(width: 34, height: 26)
+        }
     }
 }
 
