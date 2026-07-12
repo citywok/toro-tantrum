@@ -1,0 +1,19 @@
+# Manifest read by the mac-builder daemon at job time.
+# See https://github.com/citywok/mac-builder for schema.
+app: nonono
+build_path: .
+actions:
+  test:    bash build.sh test
+  archive: bash build.sh archive
+  ota:     bash build.sh ota
+  ship:    bash build.sh ship
+  ci:      bash build.sh ci
+  testflight: bash build.sh testflight
+  release: bash build.sh release
+  install: bash build.sh install
+artifact_globs:
+  - build/**/*.ipa
+  - build/manifest.plist
+  - build/install.html
+  - build/**/*.xcresult
+timeout_seconds: 1800

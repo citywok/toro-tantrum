@@ -1,0 +1,66 @@
+name: NoNoNo
+options:
+  bundleIdPrefix: me.citywok
+  deploymentTarget:
+    iOS: "16.0"
+  developmentLanguage: en
+settings:
+  base:
+    DEVELOPMENT_TEAM: 827WYA3YJJ
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    CODE_SIGN_STYLE: Automatic
+targets:
+  NoNoNo:
+    type: application
+    platform: iOS
+    sources:
+      - path: NoNoNo
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.nonono
+        INFOPLIST_FILE: NoNoNo/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: "NO"
+        GENERATE_INFOPLIST_FILE: "NO"
+  NoNoNoTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: NoNoNoTests
+    dependencies:
+      - target: NoNoNo
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.nonono.tests
+        GENERATE_INFOPLIST_FILE: "YES"
+  NoNoNoUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: NoNoNoUITests
+    dependencies:
+      - target: NoNoNo
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.nonono.uitests
+        GENERATE_INFOPLIST_FILE: "YES"
+        TEST_TARGET_NAME: NoNoNo
+schemes:
+  NoNoNo:
+    build:
+      targets:
+        NoNoNo: all
+        NoNoNoTests: [test]
+        NoNoNoUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - NoNoNoTests
+        - NoNoNoUITests
+    archive:
+      config: Release
