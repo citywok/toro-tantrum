@@ -29,9 +29,10 @@ final class VoiceBox {
         speak("game over. god damn it.")
     }
 
-    /// The formal introduction, in a genuine French accent.
+    /// The formal introduction. French, delivered in confident, terrible
+    /// American — spelled phonetically so the en-US voice butchers it right.
     func sayIntro() {
-        speak("Je m'appelle... Josh Smash!", rate: 0.5, language: "fr-FR")
+        speak("juh muh pell... Josh Smash!", rate: 0.48)
     }
 
     func speak(_ text: String, rate: Float = 0.58, language: String = "en-US") {
