@@ -44,10 +44,14 @@ enum QuoteBank {
         .rainbow: ["HOW DARE YOU. THAT ONE'S SACRED."],
     ]
 
-    /// The catchphrase. Every mistake gets this, immediately, no exceptions.
-    static let mistake = "NO NO NO NO NO!"
+    /// The catchphrase, with the correct cadence. Escapes get this, immediately.
+    static let mistake = "NO, NO NO NO NO!"
+
+    /// Smacking something he loves.
+    static let badTapMistake = "GODDAMNIT!! 😁"
 
     static let rageModeStart = [
+        "JOSH SMASHED!!",
         "FULL RALPH MODE!!",
         "I'M GONNA WRECK IT!!",
         "MAXIMUM GODDAMNIT!!",
@@ -60,6 +64,9 @@ enum QuoteBank {
         "Breathe in. Aloha. Breathe out. ...GODDAMNIT.",
         "Hawaii called. It would like quieter residents.",
         "Your scalp is sunburned and so is your pride.",
+        "Josh smashed. Josh very smashed. Josh horizontal.",
+        "Oh my god, you killed the combo. You bastard!",
+        "Screw you guys. He's going home.",
     ]
 
     static func smackQuote(for kind: TargetKind) -> String {

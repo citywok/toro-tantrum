@@ -12,17 +12,18 @@ final class GameEngineTests: XCTestCase {
         return GameEngine(tuning: tuning, seed: seed)
     }
 
-    /// Advance the clock in small steps until a target is on the board.
+    /// Advance the clock in small steps until a matching target is on the board.
     private func waitForTarget(_ engine: GameEngine,
-                               from time: inout TimeInterval) -> SpawnedTarget {
+                               from time: inout TimeInterval,
+                               where predicate: (SpawnedTarget) -> Bool = { _ in true }) -> SpawnedTarget {
         var steps = 0
-        while engine.targets.isEmpty && steps < 1000 {
+        while steps < 5000 {
+            if let match = engine.targets.first(where: predicate) { return match }
             time += 0.05
             engine.advance(to: time)
             steps += 1
         }
-        precondition(!engine.targets.isEmpty, "no target spawned in 50s of game time")
-        return engine.targets[0]
+        preconditionFailure("no matching target spawned in 250s of game time")
     }
 
     func testStartInitialState() {
@@ -175,6 +176,57 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(engine.combo, 20)
         XCTAssertEqual(engine.bestCombo, 20)
         XCTAssertEqual(engine.comboMultiplier, 4, "multiplier caps at 4x")
+    }
+
+    func testBadTapEmitsLifeLossEvent() {
+        let engine = makeEngine(alohaChance: 1)
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+        let target = waitForTarget(engine, from: &time)
+        _ = engine.smack(target.id, at: time)
+        XCTAssertEqual(engine.lastLifeLoss?.cause, .badTap)
+        XCTAssertEqual(engine.lastLifeLoss?.kind, target.kind)
+        XCTAssertEqual(engine.lastLifeLoss?.seq, 1)
+    }
+
+    func testEscapeEmitsLifeLossEventWithIncrementingSeq() {
+        let engine = makeEngine()
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+        let first = waitForTarget(engine, from: &time)
+        engine.advance(to: first.expiresAt + 0.01)
+        XCTAssertEqual(engine.lastLifeLoss?.cause, .escape)
+        XCTAssertEqual(engine.lastLifeLoss?.seq, 1)
+
+        time = first.expiresAt + 0.01
+        let second = waitForTarget(engine, from: &time)
+        engine.advance(to: second.expiresAt + 0.01)
+        XCTAssertEqual(engine.lastLifeLoss?.seq, 2)
+    }
+
+    func testJoshSmashedMakesAlohaTargetsBonus() {
+        let engine = makeEngine(alohaChance: 0.5, seed: 7) { tuning in
+            tuning.ragePerSmack = 1.0
+            tuning.rageDuration = 600
+        }
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+
+        // Enter JOSH SMASHED via a rage-target smack.
+        let rageTarget = waitForTarget(engine, from: &time) { $0.kind.isRage }
+        _ = engine.smack(rageTarget.id, at: time)
+        XCTAssertTrue(engine.isRageMode)
+
+        // While smashed, smacking his own mai tai is a bonus, not a mistake.
+        let alohaTarget = waitForTarget(engine, from: &time) { !$0.kind.isRage }
+        let livesBefore = engine.lives
+        let scoreBefore = engine.score
+        let result = engine.smack(alohaTarget.id, at: time)
+
+        XCTAssertEqual(result?.lostLife, false)
+        XCTAssertEqual(engine.lives, livesBefore)
+        XCTAssertGreaterThan(engine.score, scoreBefore)
+        XCTAssertNil(engine.lastLifeLoss)
     }
 
     func testResetReturnsToMenu() {

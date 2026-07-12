@@ -6,9 +6,9 @@ struct RootView: View {
     @AppStorage("gingerMode") private var gingerMode = false
     @AppStorage("hapticsOn") private var hapticsOn = true
     @AppStorage("voiceOn") private var voiceOn = true
+    @AppStorage("soundOn") private var soundOn = true
     @State private var showSettings = false
     @State private var lastGameWasHighScore = false
-    @State private var prevLives = Tuning().startLives
 
     var body: some View {
         ZStack {
@@ -22,7 +22,8 @@ struct RootView: View {
                     onSettings: { showSettings = true }
                 )
             case .playing:
-                GameView(engine: engine, gingerMode: gingerMode, hapticsOn: hapticsOn)
+                GameView(engine: engine, gingerMode: gingerMode,
+                         hapticsOn: hapticsOn, soundOn: soundOn, voiceOn: voiceOn)
             case .gameOver:
                 GameOverView(
                     score: engine.score,
@@ -39,18 +40,32 @@ struct RootView: View {
         .onChange(of: engine.phase) { phase in
             if phase == .gameOver {
                 lastGameWasHighScore = scores.record(score: engine.score, smacks: engine.smacks)
+                if soundOn { SoundKit.shared.gameOver() }
+                if voiceOn {
+                    // Let the mistake yell finish before the eulogy.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+                        if engine.phase == .gameOver { VoiceBox.shared.sayGameOver() }
+                    }
+                }
             }
         }
         // Every mistake is announced out loud, immediately — including the
         // final one, which is why this lives here and not in GameView.
-        .onChange(of: engine.lives) { newLives in
-            if newLives < prevLives && voiceOn {
-                VoiceBox.shared.sayNo()
+        .onChange(of: engine.lastLifeLoss) { event in
+            guard let event else { return }
+            if hapticsOn { Haptics.bad() }
+            if soundOn {
+                event.cause == .badTap ? SoundKit.shared.mistake() : SoundKit.shared.escape()
             }
-            prevLives = newLives
+            if voiceOn {
+                event.cause == .badTap
+                    ? VoiceBox.shared.sayGoddamnit()
+                    : VoiceBox.shared.sayNoNoNoNoNo()
+            }
         }
         .sheet(isPresented: $showSettings) {
-            SettingsView(gingerMode: $gingerMode, hapticsOn: $hapticsOn, voiceOn: $voiceOn)
+            SettingsView(gingerMode: $gingerMode, hapticsOn: $hapticsOn,
+                         voiceOn: $voiceOn, soundOn: $soundOn)
         }
         .statusBarHidden(true)
     }

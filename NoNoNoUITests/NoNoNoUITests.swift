@@ -38,6 +38,10 @@ final class NoNoNoUITests: XCTestCase {
 
         XCTAssertTrue(element(app, "gingerToggle").waitForExistence(timeout: 5),
                       "Ginger Mode toggle missing")
+        XCTAssertTrue(element(app, "soundToggle").waitForExistence(timeout: 5),
+                      "Game sounds toggle missing")
+        XCTAssertTrue(element(app, "cartoonToggle").waitForExistence(timeout: 5),
+                      "Cartoon Mode toggle missing")
 
         let done = element(app, "settingsDoneButton")
         XCTAssertTrue(done.waitForExistence(timeout: 5))

@@ -31,8 +31,12 @@ final class QuoteBankTests: XCTestCase {
         }
     }
 
-    func testMistakeLineIsTheCatchphrase() {
-        XCTAssertEqual(QuoteBank.mistake, "NO NO NO NO NO!")
+    func testMistakeLineIsTheCatchphraseWithCorrectCadence() {
+        XCTAssertEqual(QuoteBank.mistake, "NO, NO NO NO NO!")
+    }
+
+    func testBadTapLineIsGoddamnit() {
+        XCTAssertTrue(QuoteBank.badTapMistake.contains("GODDAMNIT"))
     }
 
     func testStaticPoolsAreNonEmpty() {

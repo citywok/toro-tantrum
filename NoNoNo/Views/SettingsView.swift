@@ -4,6 +4,8 @@ struct SettingsView: View {
     @Binding var gingerMode: Bool
     @Binding var hapticsOn: Bool
     @Binding var voiceOn: Bool
+    @Binding var soundOn: Bool
+    @AppStorage("cartoonMode") private var cartoonMode = false
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -27,12 +29,26 @@ struct SettingsView: View {
                     Toggle(isOn: $voiceOn) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("He yells out loud")
-                            Text("“no no no no no!” on every mistake.")
+                            Text("“no, no no no no!” — plays even on silent.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
                     }
                     .accessibilityIdentifier("voiceToggle")
+                    Toggle("Game sounds", isOn: $soundOn)
+                        .accessibilityIdentifier("soundToggle")
+                }
+
+                Section("Face") {
+                    Toggle(isOn: $cartoonMode) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Cartoon Mode")
+                            Text("Construction-paper Josh instead of the real one.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .accessibilityIdentifier("cartoonToggle")
                 }
 
                 Section("About") {

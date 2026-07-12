@@ -40,7 +40,7 @@ struct StartView: View {
                 .font(.caption.bold())
                 .foregroundColor(.white.opacity(0.9))
 
-            FaceView(mood: .grinning, ginger: gingerMode, size: 165)
+            CharacterFace(mood: .grinning, ginger: gingerMode, size: 165)
 
             Text("Smack everything he hates.\nDo NOT touch the mai tai.")
                 .font(.callout.weight(.medium))

@@ -4,10 +4,13 @@ struct GameView: View {
     @ObservedObject var engine: GameEngine
     var gingerMode: Bool
     var hapticsOn: Bool
+    var soundOn: Bool
+    var voiceOn: Bool
 
     @State private var quote = "BRING IT."
     @State private var bursts: [Burst] = []
-    @State private var prevLives = Tuning().startLives
+    @State private var talking = false
+    @State private var talkUntil = Date.distantPast
 
     private let tick = Timer.publish(every: 1.0 / 30.0, on: .main, in: .common).autoconnect()
 
@@ -51,18 +54,22 @@ struct GameView: View {
         .overlay(rageBorder)
         .onReceive(tick) { _ in
             engine.advance(to: Date().timeIntervalSinceReferenceDate)
+            let nowTalking = Date() < talkUntil
+            if talking != nowTalking { talking = nowTalking }
         }
-        .onAppear { prevLives = engine.lives }
         // Any mistake — bad tap or escaped target — gets the catchphrase,
-        // immediately. The spoken version is handled in RootView so it
-        // survives the final life loss removing this view.
-        .onChange(of: engine.lives) { newLives in
-            if newLives < prevLives {
-                quote = QuoteBank.mistake
-                if hapticsOn { Haptics.bad() }
-            }
-            prevLives = newLives
+        // immediately. Haptics/sounds/voice live in RootView so they survive
+        // the final life loss removing this view.
+        .onChange(of: engine.lastLifeLoss) { event in
+            guard let event else { return }
+            quote = event.cause == .badTap ? QuoteBank.badTapMistake : QuoteBank.mistake
+            flapFor(1.0)
         }
+    }
+
+    private func flapFor(_ seconds: TimeInterval) {
+        talkUntil = Date().addingTimeInterval(seconds)
+        talking = true
     }
 
     private var hud: some View {
@@ -99,7 +106,7 @@ struct GameView: View {
             }
             .frame(height: 13)
             .overlay(
-                Text(engine.isRageMode ? "🔥 RAGE MODE 🔥" : "R A G E")
+                Text(engine.isRageMode ? "🍹 JOSH SMASHED 🍹" : "SMASH-O-METER")
                     .font(.system(size: 9, weight: .black))
                     .foregroundColor(.white.opacity(0.95))
             )
@@ -109,8 +116,8 @@ struct GameView: View {
 
     private var faceArea: some View {
         HStack(alignment: .center, spacing: 12) {
-            FaceView(mood: engine.isRageMode ? .raging : .grinning,
-                     ginger: gingerMode, size: 92)
+            CharacterFace(mood: engine.isRageMode ? .raging : .grinning,
+                          ginger: gingerMode, size: 92, talking: talking)
             SpeechBubble(text: quote)
             Spacer(minLength: 0)
         }
@@ -132,16 +139,25 @@ struct GameView: View {
         let now = Date().timeIntervalSinceReferenceDate
         guard let result = engine.smack(target.id, at: now) else { return }
 
-        // Mistakes (lostLife) are handled by the onChange(of: lives) watcher.
+        // Mistakes (lostLife) are handled by the lastLifeLoss watchers.
         if !result.lostLife {
             if hapticsOn {
                 result.enteredRageMode ? Haptics.rage() : Haptics.hit()
             }
+            if soundOn {
+                result.enteredRageMode
+                    ? SoundKit.shared.rageStart()
+                    : SoundKit.shared.smack(combo: engine.combo)
+            }
+            if voiceOn {
+                result.enteredRageMode ? VoiceBox.shared.sayRage() : VoiceBox.shared.sayNo()
+            }
             if result.enteredRageMode {
-                quote = QuoteBank.rageModeStart.randomElement() ?? "RAGE!!"
+                quote = QuoteBank.rageModeStart.randomElement() ?? "JOSH SMASHED!!"
             } else {
                 quote = QuoteBank.smackQuote(for: target.kind)
             }
+            flapFor(result.enteredRageMode ? 1.2 : 0.5)
         }
 
         let burst = Burst(

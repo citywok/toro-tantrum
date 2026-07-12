@@ -25,7 +25,7 @@ struct GameOverView: View {
             .foregroundColor(.white)
             .shadow(color: .black.opacity(0.35), radius: 0, x: 2, y: 3)
 
-            FaceView(mood: .defeated, ginger: gingerMode, size: 140)
+            CharacterFace(mood: .defeated, ginger: gingerMode, size: 140)
 
             Text("\(score)")
                 .font(.system(size: 64, weight: .black, design: .rounded))

@@ -64,6 +64,17 @@ final class GameEngine: ObservableObject {
     @Published private(set) var targets: [SpawnedTarget] = []
     @Published private(set) var smacks = 0
 
+    /// Emitted on every life loss so the UI can react (yell) per cause.
+    struct LifeLossEvent: Equatable {
+        enum Cause: Equatable { case badTap, escape }
+        let cause: Cause
+        let kind: TargetKind
+        let seq: Int
+    }
+
+    @Published private(set) var lastLifeLoss: LifeLossEvent?
+    private var lifeLossSeq = 0
+
     let tuning: Tuning
     private var rng: SplitMix64
     private var nextSpawnAt: TimeInterval = 0
@@ -98,6 +109,7 @@ final class GameEngine: ObservableObject {
         isRageMode = false
         targets = []
         smacks = 0
+        lastLifeLoss = nil
         nextSpawnAt = now + 0.4
         phase = .playing
     }
@@ -123,6 +135,7 @@ final class GameEngine: ObservableObject {
                 combo = 0
                 // Rage mode is a frenzy: escapes are free.
                 if !isRageMode {
+                    recordLifeLoss(.escape, kind: target.kind)
                     loseLife()
                 }
             }
@@ -143,9 +156,18 @@ final class GameEngine: ObservableObject {
         let target = targets.remove(at: index)
 
         guard target.kind.isRage else {
+            // JOSH SMASHED: while he's smashed he'll smack anything, even
+            // his own mai tai. Bonus points, no consequences. Like Josh.
+            if isRageMode {
+                let points = 15
+                score += points
+                return SmackResult(kind: target.kind, pointsAwarded: points,
+                                   lostLife: false, enteredRageMode: false)
+            }
             combo = 0
             score = max(0, score - 50)
             rage = max(0, rage - 0.25)
+            recordLifeLoss(.badTap, kind: target.kind)
             loseLife()
             return SmackResult(kind: target.kind, pointsAwarded: -50,
                                lostLife: true, enteredRageMode: false)
@@ -174,6 +196,11 @@ final class GameEngine: ObservableObject {
                            lostLife: false, enteredRageMode: enteredRage)
     }
 
+    private func recordLifeLoss(_ cause: LifeLossEvent.Cause, kind: TargetKind) {
+        lifeLossSeq += 1
+        lastLifeLoss = LifeLossEvent(cause: cause, kind: kind, seq: lifeLossSeq)
+    }
+
     private func loseLife() {
         lives -= 1
         if lives <= 0 {
@@ -184,10 +211,9 @@ final class GameEngine: ObservableObject {
     }
 
     private func makeTarget(at now: TimeInterval) -> SpawnedTarget {
-        // The frenzy is nearly all smackable targets, but never spawns aloha
-        // targets more often than normal play would.
-        let alohaChance = isRageMode ? min(tuning.alohaChance, 0.05) : tuning.alohaChance
-        let pool = rng.unit() < alohaChance ? TargetKind.alohaKinds : TargetKind.rageKinds
+        // Aloha targets keep spawning during JOSH SMASHED mode — they flip
+        // from hazards to bonus targets there, so the rate stays the same.
+        let pool = rng.unit() < tuning.alohaChance ? TargetKind.alohaKinds : TargetKind.rageKinds
         let kind = pool[rng.int(below: pool.count)]
         return SpawnedTarget(id: UUID(),
                              kind: kind,
