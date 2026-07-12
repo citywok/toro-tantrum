@@ -49,7 +49,7 @@ struct StartView: View {
                 .foregroundColor(.white)
 
             Button(action: onStart) {
-                Text("TAP TO RAGE")
+                Text("TAP TO SMASH")
                     .font(.system(size: 24, weight: .black, design: .rounded))
                     .foregroundColor(.white)
                     .padding(.vertical, 16)

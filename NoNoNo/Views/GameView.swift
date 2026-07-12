@@ -11,6 +11,8 @@ struct GameView: View {
 
     @State private var quote = QuoteBank.intro
     @State private var bursts: [Burst] = []
+    @State private var smashes: [SmashBurst] = []
+    @State private var shakePhase: CGFloat = 0
     @State private var talking = false
     @State private var talkUntil = Date.distantPast
 
@@ -35,6 +37,13 @@ struct GameView: View {
                             .position(x: target.x * geo.size.width,
                                       y: target.y * geo.size.height)
                             .onTapGesture { smack(target, in: geo.size) }
+                            .transition(.asymmetric(
+                                insertion: .scale(scale: 0.3).combined(with: .opacity),
+                                removal: .scale(scale: 0.2).combined(with: .opacity)))
+                    }
+                    ForEach(smashes) { smash in
+                        SmashBurstView(emoji: smash.emoji)
+                            .position(x: smash.x, y: smash.y)
                     }
                     ForEach(bursts) { burst in
                         Text(burst.text)
@@ -47,6 +56,7 @@ struct GameView: View {
                 }
                 .animation(.spring(response: 0.25, dampingFraction: 0.6), value: engine.targets)
             }
+            .modifier(ShakeEffect(animatableData: shakePhase))
             .accessibilityElement(children: .contain)
             .accessibilityIdentifier("gameBoard")
 
@@ -149,6 +159,18 @@ struct GameView: View {
         guard let result = engine.smack(target.id, at: now) else { return }
         onSmack?(target.kind, result)
 
+        // Impact: explosion + debris at the point of contact, board shake.
+        // Mistakes shake harder — you FELT that one.
+        withAnimation(.linear(duration: 0.18)) {
+            shakePhase += result.lostLife ? 2 : 1
+        }
+        let smash = SmashBurst(id: UUID(), emoji: target.kind.emoji,
+                               x: target.x * size.width, y: target.y * size.height)
+        smashes.append(smash)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            smashes.removeAll { $0.id == smash.id }
+        }
+
         // Mistakes (lostLife) are handled by the lastLifeLoss watchers.
         if !result.lostLife {
             if hapticsOn {
@@ -183,6 +205,55 @@ struct GameView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
             withAnimation { bursts.removeAll { $0.id == burst.id } }
         }
+    }
+}
+
+struct SmashBurst: Identifiable, Equatable {
+    let id: UUID
+    let emoji: String
+    let x: CGFloat
+    let y: CGFloat
+}
+
+/// 💥 at the impact point, with bits of the victim flying off and falling.
+struct SmashBurstView: View {
+    let emoji: String
+    @State private var boom = false
+
+    var body: some View {
+        ZStack {
+            Text("💥")
+                .font(.system(size: 60))
+                .scaleEffect(boom ? 1.4 : 0.4)
+                .opacity(boom ? 0 : 1)
+            ForEach(0..<5, id: \.self) { i in
+                let angle = Double(i) / 5.0 * 2 * .pi + 0.45
+                Text(emoji)
+                    .font(.system(size: 15))
+                    .offset(x: boom ? cos(angle) * 54 : 0,
+                            y: boom ? sin(angle) * 54 + 22 : 0)
+                    .rotationEffect(.degrees(boom ? Double(i * 137) : 0))
+                    .scaleEffect(boom ? 0.4 : 1)
+                    .opacity(boom ? 0 : 0.9)
+            }
+        }
+        .allowsHitTesting(false)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.5)) { boom = true }
+        }
+    }
+}
+
+/// Quick horizontal jolt; each increment of animatableData is one hit.
+struct ShakeEffect: GeometryEffect {
+    var travel: CGFloat = 6
+    var shakesPerUnit: CGFloat = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(
+            translationX: travel * sin(animatableData * .pi * shakesPerUnit * 2),
+            y: 0))
     }
 }
 
