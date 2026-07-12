@@ -7,7 +7,7 @@ struct GameView: View {
     var soundOn: Bool
     var voiceOn: Bool
 
-    @State private var quote = "BRING IT."
+    @State private var quote = QuoteBank.intro
     @State private var bursts: [Burst] = []
     @State private var talking = false
     @State private var talkUntil = Date.distantPast
@@ -52,6 +52,7 @@ struct GameView: View {
         }
         .padding(.top, 8)
         .overlay(rageBorder)
+        .onAppear { flapFor(1.6) }
         .onReceive(tick) { _ in
             engine.advance(to: Date().timeIntervalSinceReferenceDate)
             let nowTalking = Date() < talkUntil

@@ -44,6 +44,9 @@ enum QuoteBank {
         .rainbow: ["HOW DARE YOU. THAT ONE'S SACRED."],
     ]
 
+    /// How he introduces himself. Formally. In French.
+    static let intro = "JE M'APPELLE JOSH SMASH."
+
     /// The catchphrase, with the correct cadence. Escapes get this, immediately.
     static let mistake = "NO, NO NO NO NO!"
 

@@ -29,12 +29,17 @@ final class VoiceBox {
         speak("game over. god damn it.")
     }
 
-    func speak(_ text: String, rate: Float = 0.58) {
+    /// The formal introduction, in a genuine French accent.
+    func sayIntro() {
+        speak("Je m'appelle... Josh Smash!", rate: 0.5, language: "fr-FR")
+    }
+
+    func speak(_ text: String, rate: Float = 0.58, language: String = "en-US") {
         GameAudioSession.configure()
         // A new outburst interrupts the previous one immediately.
         synthesizer.stopSpeaking(at: .immediate)
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.voice = AVSpeechSynthesisVoice(language: language)
         utterance.rate = rate
         utterance.pitchMultiplier = 0.85
         synthesizer.speak(utterance)

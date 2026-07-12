@@ -9,6 +9,7 @@ struct RootView: View {
     @AppStorage("soundOn") private var soundOn = true
     @State private var showSettings = false
     @State private var lastGameWasHighScore = false
+    @State private var saidIntro = false
 
     var body: some View {
         ZStack {
@@ -18,7 +19,10 @@ struct RootView: View {
                 StartView(
                     highScore: scores.highScore,
                     gingerMode: gingerMode,
-                    onStart: { engine.start(at: Date().timeIntervalSinceReferenceDate) },
+                    onStart: {
+                        if voiceOn { VoiceBox.shared.sayIntro() }
+                        engine.start(at: Date().timeIntervalSinceReferenceDate)
+                    },
                     onSettings: { showSettings = true }
                 )
             case .playing:
@@ -61,6 +65,12 @@ struct RootView: View {
                 event.cause == .badTap
                     ? VoiceBox.shared.sayGoddamnit()
                     : VoiceBox.shared.sayNoNoNoNoNo()
+            }
+        }
+        .onAppear {
+            if voiceOn && !saidIntro {
+                saidIntro = true
+                VoiceBox.shared.sayIntro()
             }
         }
         .sheet(isPresented: $showSettings) {
