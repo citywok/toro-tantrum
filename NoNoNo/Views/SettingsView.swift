@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @Binding var gingerMode: Bool
     @Binding var hapticsOn: Bool
+    @Binding var voiceOn: Bool
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -23,6 +24,15 @@ struct SettingsView: View {
                 Section("Feel") {
                     Toggle("Haptic smacks", isOn: $hapticsOn)
                         .accessibilityIdentifier("hapticsToggle")
+                    Toggle(isOn: $voiceOn) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("He yells out loud")
+                            Text("“no no no no no!” on every mistake.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .accessibilityIdentifier("voiceToggle")
                 }
 
                 Section("About") {

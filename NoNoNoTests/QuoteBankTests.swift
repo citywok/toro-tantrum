@@ -31,6 +31,10 @@ final class QuoteBankTests: XCTestCase {
         }
     }
 
+    func testMistakeLineIsTheCatchphrase() {
+        XCTAssertEqual(QuoteBank.mistake, "NO NO NO NO NO!")
+    }
+
     func testStaticPoolsAreNonEmpty() {
         XCTAssertFalse(QuoteBank.genericSmack.isEmpty)
         XCTAssertFalse(QuoteBank.rageModeStart.isEmpty)

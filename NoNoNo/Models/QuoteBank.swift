@@ -44,6 +44,9 @@ enum QuoteBank {
         .rainbow: ["HOW DARE YOU. THAT ONE'S SACRED."],
     ]
 
+    /// The catchphrase. Every mistake gets this, immediately, no exceptions.
+    static let mistake = "NO NO NO NO NO!"
+
     static let rageModeStart = [
         "FULL RALPH MODE!!",
         "I'M GONNA WRECK IT!!",

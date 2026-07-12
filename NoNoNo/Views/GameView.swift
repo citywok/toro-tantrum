@@ -7,6 +7,7 @@ struct GameView: View {
 
     @State private var quote = "BRING IT."
     @State private var bursts: [Burst] = []
+    @State private var prevLives = Tuning().startLives
 
     private let tick = Timer.publish(every: 1.0 / 30.0, on: .main, in: .common).autoconnect()
 
@@ -50,6 +51,17 @@ struct GameView: View {
         .overlay(rageBorder)
         .onReceive(tick) { _ in
             engine.advance(to: Date().timeIntervalSinceReferenceDate)
+        }
+        .onAppear { prevLives = engine.lives }
+        // Any mistake — bad tap or escaped target — gets the catchphrase,
+        // immediately. The spoken version is handled in RootView so it
+        // survives the final life loss removing this view.
+        .onChange(of: engine.lives) { newLives in
+            if newLives < prevLives {
+                quote = QuoteBank.mistake
+                if hapticsOn { Haptics.bad() }
+            }
+            prevLives = newLives
         }
     }
 
@@ -120,20 +132,16 @@ struct GameView: View {
         let now = Date().timeIntervalSinceReferenceDate
         guard let result = engine.smack(target.id, at: now) else { return }
 
-        if hapticsOn {
-            if result.lostLife {
-                Haptics.bad()
-            } else if result.enteredRageMode {
-                Haptics.rage()
-            } else {
-                Haptics.hit()
+        // Mistakes (lostLife) are handled by the onChange(of: lives) watcher.
+        if !result.lostLife {
+            if hapticsOn {
+                result.enteredRageMode ? Haptics.rage() : Haptics.hit()
             }
-        }
-
-        if result.enteredRageMode {
-            quote = QuoteBank.rageModeStart.randomElement() ?? "RAGE!!"
-        } else {
-            quote = QuoteBank.smackQuote(for: target.kind)
+            if result.enteredRageMode {
+                quote = QuoteBank.rageModeStart.randomElement() ?? "RAGE!!"
+            } else {
+                quote = QuoteBank.smackQuote(for: target.kind)
+            }
         }
 
         let burst = Burst(

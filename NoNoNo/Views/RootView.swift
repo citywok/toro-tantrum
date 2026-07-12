@@ -5,8 +5,10 @@ struct RootView: View {
     @StateObject private var scores = ScoreStore()
     @AppStorage("gingerMode") private var gingerMode = false
     @AppStorage("hapticsOn") private var hapticsOn = true
+    @AppStorage("voiceOn") private var voiceOn = true
     @State private var showSettings = false
     @State private var lastGameWasHighScore = false
+    @State private var prevLives = Tuning().startLives
 
     var body: some View {
         ZStack {
@@ -39,8 +41,16 @@ struct RootView: View {
                 lastGameWasHighScore = scores.record(score: engine.score, smacks: engine.smacks)
             }
         }
+        // Every mistake is announced out loud, immediately — including the
+        // final one, which is why this lives here and not in GameView.
+        .onChange(of: engine.lives) { newLives in
+            if newLives < prevLives && voiceOn {
+                VoiceBox.shared.sayNo()
+            }
+            prevLives = newLives
+        }
         .sheet(isPresented: $showSettings) {
-            SettingsView(gingerMode: $gingerMode, hapticsOn: $hapticsOn)
+            SettingsView(gingerMode: $gingerMode, hapticsOn: $hapticsOn, voiceOn: $voiceOn)
         }
         .statusBarHidden(true)
     }
