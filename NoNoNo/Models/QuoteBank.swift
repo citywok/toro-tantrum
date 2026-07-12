@@ -56,6 +56,7 @@ enum QuoteBank {
         ],
         .thatSong: [
             "SKIP IT. SKIP IT NOW.",
+            "ASHNIKKO KNOWS WHAT SHE DID.",
             "NOT THAT SONG. NO.",
         ],
         .kids: [
@@ -65,6 +66,10 @@ enum QuoteBank {
         .newDriver: [
             "A LEARNER?! ON MY ROAD?!",
             "THE STICKER ISN'T A SHIELD!",
+        ],
+        .cardio: [
+            "MY KNEES ARE DECORATIVE!!",
+            "I SPRINT ONLY TO BRUNCH.",
         ],
         .switchGame: ["NOT THE SWITCH! GODDAMNIT!"],
         .maiTai: ["MY MAI TAI!! WHY!"],
