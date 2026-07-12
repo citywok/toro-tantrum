@@ -28,6 +28,22 @@ final class NoNoNoUITests: XCTestCase {
                       "speech bubble missing")
     }
 
+    func testRageOffReachesHandoff() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let rageOff = element(app, "rageOffButton")
+        XCTAssertTrue(rageOff.waitForExistence(timeout: 10), "rage-off button missing")
+        rageOff.tap()
+
+        let startMatch = element(app, "startMatchButton")
+        XCTAssertTrue(startMatch.waitForExistence(timeout: 5), "rage-off setup missing")
+        startMatch.tap()
+
+        XCTAssertTrue(element(app, "readyButton").waitForExistence(timeout: 5),
+                      "handoff screen missing")
+    }
+
     func testSettingsOpensAndCloses() throws {
         let app = XCUIApplication()
         app.launch()

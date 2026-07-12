@@ -38,6 +38,26 @@ enum QuoteBank {
             "THAT'S WHY I MOVED!",
             "NOT EVEN ONCE.",
         ],
+        .shannon: [
+            "NOT TODAY, SHANNON.",
+            "SHE KNOWS WHAT SHE DID.",
+        ],
+        .badDrivers: [
+            "USE YOUR BLINKER!!",
+            "WHO TAUGHT YOU TO DRIVE?!",
+        ],
+        .dodTravel: [
+            "A 6 A.M. CONNECTION?! THROUGH ATLANTA?!",
+            "MIDDLE SEAT. AGAIN. GODDAMNIT.",
+        ],
+        .hoa: [
+            "IT'S MY LAWN!!",
+            "FINED?! FOR WHAT?!",
+        ],
+        .thatSong: [
+            "SKIP IT. SKIP IT NOW.",
+            "NOT THAT SONG. NO.",
+        ],
         .switchGame: ["NOT THE SWITCH! GODDAMNIT!"],
         .maiTai: ["MY MAI TAI!! WHY!"],
         .hibiscus: ["THAT WAS DECORATIVE!"],
@@ -71,6 +91,19 @@ enum QuoteBank {
         "Oh my god, you killed the combo. You bastard!",
         "Screw you guys. He's going home.",
     ]
+
+    /// Rage-Off handoff trash talk. %@ is the previous player's name.
+    static let trashTalkTemplates = [
+        "%@ CALLS THAT A SCORE? GODDAMNIT.",
+        "JOSH IS NOT IMPRESSED WITH %@.",
+        "%@ RAGES LIKE A TOURIST.",
+        "EVEN THE GINGERS OUTSCORE %@.",
+        "%@... NO. JUST NO. NO NO NO.",
+    ]
+
+    static func trashTalk(for name: String) -> String {
+        String(format: trashTalkTemplates.randomElement() ?? "%@.", name)
+    }
 
     static func smackQuote(for kind: TargetKind) -> String {
         let specific = kindQuotes[kind] ?? []

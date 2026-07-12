@@ -27,7 +27,18 @@ final class TargetKindTests: XCTestCase {
     }
 
     func testRedHairIsTheJackpot() {
-        XCTAssertEqual(TargetKind.rageKinds.max(by: { $0.points < $1.points }), .redHair,
-                       "the redhead denial is the whole point of the game")
+        XCTAssertEqual(TargetKind.rageKinds.max(by: { $0.points < $1.points })?.points,
+                       TargetKind.redHair.points,
+                       "the redhead denial stays top-tier")
+    }
+
+    func testHateListTargetsHaveCaptionsAndAlohaDoNot() {
+        for kind in [TargetKind.shannon, .badDrivers, .dodTravel, .hoa, .thatSong] {
+            XCTAssertTrue(kind.isRage)
+            XCTAssertNotNil(kind.caption, "\(kind) needs its caption to land the joke")
+        }
+        for kind in TargetKind.alohaKinds {
+            XCTAssertNil(kind.caption)
+        }
     }
 }

@@ -80,6 +80,12 @@ struct GameView: View {
                     .font(.system(size: 36, weight: .black, design: .rounded))
                     .foregroundColor(.white)
                     .accessibilityIdentifier("scoreLabel")
+                if let timeLeft = engine.timeLeft {
+                    Text("⏱\(Int(timeLeft.rounded(.up)))")
+                        .font(.system(size: 20, weight: .heavy, design: .rounded))
+                        .foregroundColor(timeLeft < 10 ? .red : .white.opacity(0.9))
+                        .accessibilityIdentifier("timerLabel")
+                }
                 if engine.combo >= 2 {
                     Text("x\(engine.comboMultiplier) · \(engine.combo) COMBO")
                         .font(.caption.bold())
@@ -193,7 +199,19 @@ struct TargetView: View {
                                     : Color(red: 0.05, green: 0.45, blue: 0.28),
                                     lineWidth: 3)
                 )
-            Text(kind.emoji).font(.system(size: 34))
+            if let caption = kind.caption {
+                VStack(spacing: -1) {
+                    Text(kind.emoji).font(.system(size: 24))
+                    Text(caption)
+                        .font(.system(size: 7.5, weight: .black, design: .rounded))
+                        .foregroundColor(.black)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
+                .padding(.horizontal, 2)
+            } else {
+                Text(kind.emoji).font(.system(size: 34))
+            }
         }
         .frame(width: 64, height: 64)
         .contentShape(Circle())

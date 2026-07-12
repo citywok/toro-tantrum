@@ -20,6 +20,9 @@ struct Tuning {
     var rageDuration: TimeInterval = 6
     var smacksPerLevel = 10
     var maxTargetsOnScreen = 4
+    /// When set, the run ends after this many seconds (Rage-Off rounds).
+    /// nil = classic endless mode, lives only.
+    var roundDuration: TimeInterval?
 }
 
 /// Deterministic RNG so tests can replay exact games.
@@ -75,6 +78,10 @@ final class GameEngine: ObservableObject {
     @Published private(set) var lastLifeLoss: LifeLossEvent?
     private var lifeLossSeq = 0
 
+    /// Seconds remaining in a timed round; nil in endless mode.
+    @Published private(set) var timeLeft: TimeInterval?
+    private var roundEndsAt: TimeInterval?
+
     let tuning: Tuning
     private var rng: SplitMix64
     private var nextSpawnAt: TimeInterval = 0
@@ -99,7 +106,12 @@ final class GameEngine: ObservableObject {
         max(tuning.minLifetime, tuning.baseLifetime - Double(level - 1) * 0.09)
     }
 
-    func start(at now: TimeInterval) {
+    /// Starts a run. Passing a seed resets the RNG so two runs with the same
+    /// seed replay the identical target sequence — the Rage-Off fairness rule.
+    func start(at now: TimeInterval, seed: UInt64? = nil) {
+        if let seed {
+            rng = SplitMix64(seed: seed)
+        }
         score = 0
         combo = 0
         bestCombo = 0
@@ -110,6 +122,8 @@ final class GameEngine: ObservableObject {
         targets = []
         smacks = 0
         lastLifeLoss = nil
+        roundEndsAt = tuning.roundDuration.map { now + $0 }
+        timeLeft = tuning.roundDuration
         nextSpawnAt = now + 0.4
         phase = .playing
     }
@@ -122,6 +136,15 @@ final class GameEngine: ObservableObject {
     /// Drive the game clock forward. Call from a display-rate timer.
     func advance(to now: TimeInterval) {
         guard phase == .playing else { return }
+
+        if let end = roundEndsAt {
+            timeLeft = max(0, end - now)
+            if now >= end {
+                phase = .gameOver
+                targets = []
+                return
+            }
+        }
 
         if isRageMode && now >= rageEndsAt {
             isRageMode = false

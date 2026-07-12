@@ -4,6 +4,7 @@ struct StartView: View {
     var highScore: Int
     var gingerMode: Bool
     var onStart: () -> Void
+    var onRageOff: () -> Void
     var onSettings: () -> Void
 
     @State private var wobble = false
@@ -57,6 +58,17 @@ struct StartView: View {
                     .overlay(Capsule().stroke(.white, lineWidth: 3))
             }
             .accessibilityIdentifier("startButton")
+
+            Button(action: onRageOff) {
+                Text("RAGE-OFF · PASS THE PHONE")
+                    .font(.system(size: 15, weight: .black, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 24)
+                    .background(Capsule().fill(Color.black.opacity(0.35)))
+                    .overlay(Capsule().stroke(.white.opacity(0.75), lineWidth: 2))
+            }
+            .accessibilityIdentifier("rageOffButton")
 
             if highScore > 0 {
                 Text("HIGH SCORE: \(highScore)")

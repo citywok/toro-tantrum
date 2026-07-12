@@ -8,6 +8,7 @@ struct RootView: View {
     @AppStorage("voiceOn") private var voiceOn = true
     @AppStorage("soundOn") private var soundOn = true
     @State private var showSettings = false
+    @State private var showRageOff = false
     @State private var lastGameWasHighScore = false
     @State private var saidIntro = false
 
@@ -23,6 +24,7 @@ struct RootView: View {
                         if voiceOn { VoiceBox.shared.sayIntro() }
                         engine.start(at: Date().timeIntervalSinceReferenceDate)
                     },
+                    onRageOff: { showRageOff = true },
                     onSettings: { showSettings = true }
                 )
             case .playing:
@@ -55,18 +57,8 @@ struct RootView: View {
         }
         // Every mistake is announced out loud, immediately — including the
         // final one, which is why this lives here and not in GameView.
-        .onChange(of: engine.lastLifeLoss) { event in
-            guard let event else { return }
-            if hapticsOn { Haptics.bad() }
-            if soundOn {
-                event.cause == .badTap ? SoundKit.shared.mistake() : SoundKit.shared.escape()
-            }
-            if voiceOn {
-                event.cause == .badTap
-                    ? VoiceBox.shared.sayGoddamnit()
-                    : VoiceBox.shared.sayNoNoNoNoNo()
-            }
-        }
+        .mistakeFeedback(engine: engine, hapticsOn: hapticsOn,
+                         soundOn: soundOn, voiceOn: voiceOn)
         .onAppear {
             if voiceOn && !saidIntro {
                 saidIntro = true
@@ -76,6 +68,11 @@ struct RootView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(gingerMode: $gingerMode, hapticsOn: $hapticsOn,
                          voiceOn: $voiceOn, soundOn: $soundOn)
+        }
+        .fullScreenCover(isPresented: $showRageOff) {
+            RageOffFlowView(gingerMode: gingerMode, hapticsOn: hapticsOn,
+                            soundOn: soundOn, voiceOn: voiceOn, scores: scores,
+                            onExit: { showRageOff = false })
         }
         .statusBarHidden(true)
     }

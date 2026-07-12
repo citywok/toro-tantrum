@@ -47,5 +47,12 @@ final class QuoteBankTests: XCTestCase {
         XCTAssertFalse(QuoteBank.genericSmack.isEmpty)
         XCTAssertFalse(QuoteBank.rageModeStart.isEmpty)
         XCTAssertFalse(QuoteBank.gameOverInsults.isEmpty)
+        XCTAssertFalse(QuoteBank.trashTalkTemplates.isEmpty)
+    }
+
+    func testTrashTalkIncludesTheName() {
+        for _ in 0..<10 {
+            XCTAssertTrue(QuoteBank.trashTalk(for: "KYLE").contains("KYLE"))
+        }
     }
 }

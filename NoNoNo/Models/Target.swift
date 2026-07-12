@@ -10,6 +10,12 @@ enum TargetKind: String, CaseIterable, Equatable {
     case touristCam
     case pineapplePizza
     case snowflake
+    // From the group chat's verified list of things Josh hates
+    case shannon
+    case badDrivers
+    case dodTravel
+    case hoa
+    case thatSong
     // Aloha targets — DO NOT SMACK
     case switchGame
     case maiTai
@@ -18,7 +24,8 @@ enum TargetKind: String, CaseIterable, Equatable {
 
     var isRage: Bool {
         switch self {
-        case .redHair, .sunscreen, .dnaTest, .touristCam, .pineapplePizza, .snowflake:
+        case .redHair, .sunscreen, .dnaTest, .touristCam, .pineapplePizza, .snowflake,
+             .shannon, .badDrivers, .dodTravel, .hoa, .thatSong:
             return true
         case .switchGame, .maiTai, .hibiscus, .rainbow:
             return false
@@ -36,6 +43,11 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .touristCam: return "📸"
         case .pineapplePizza: return "🍕"
         case .snowflake: return "❄️"
+        case .shannon: return "📛"
+        case .badDrivers: return "🚗"
+        case .dodTravel: return "✈️"
+        case .hoa: return "🏘️"
+        case .thatSong: return "🎵"
         case .switchGame: return "🎮"
         case .maiTai: return "🍹"
         case .hibiscus: return "🌺"
@@ -47,11 +59,24 @@ enum TargetKind: String, CaseIterable, Equatable {
     /// the engine applies a penalty instead.
     var points: Int {
         switch self {
-        case .redHair: return 25
-        case .dnaTest: return 20
-        case .pineapplePizza: return 15
+        case .redHair, .shannon: return 25
+        case .dnaTest, .thatSong: return 20
+        case .pineapplePizza, .badDrivers, .dodTravel, .hoa: return 15
         case .sunscreen, .touristCam, .snowflake: return 10
         case .switchGame, .maiTai, .hibiscus, .rainbow: return 0
+        }
+    }
+
+    /// Short caption shown under the emoji for the group-chat hate list —
+    /// these need words, an emoji alone doesn't land the joke.
+    var caption: String? {
+        switch self {
+        case .shannon: return "SHANNON L."
+        case .badDrivers: return "DRIVERS"
+        case .dodTravel: return "DOD TRAVEL"
+        case .hoa: return "THE HOA"
+        case .thatSong: return "THAT SONG"
+        default: return nil
         }
     }
 
@@ -63,6 +88,11 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .touristCam: return "tourist camera"
         case .pineapplePizza: return "pineapple pizza"
         case .snowflake: return "snowflake"
+        case .shannon: return "Shannon"
+        case .badDrivers: return "people driving in his vicinity"
+        case .dodTravel: return "DoD travel booking"
+        case .hoa: return "the HOA"
+        case .thatSong: return "that song"
         case .switchGame: return "the Switch"
         case .maiTai: return "the mai tai"
         case .hibiscus: return "the hibiscus"

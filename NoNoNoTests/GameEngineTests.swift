@@ -227,6 +227,41 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(engine.lastLifeLoss?.cause, .badTap)
     }
 
+    func testTimedRoundEndsAtDuration() {
+        let engine = makeEngine { $0.roundDuration = 10 }
+        engine.start(at: 0)
+        engine.advance(to: 9)
+        XCTAssertEqual(engine.phase, .playing)
+        XCTAssertEqual(engine.timeLeft ?? -1, 1, accuracy: 0.001)
+        engine.advance(to: 10.01)
+        XCTAssertEqual(engine.phase, .gameOver)
+        XCTAssertTrue(engine.targets.isEmpty)
+    }
+
+    func testEndlessModeHasNoTimer() {
+        let engine = makeEngine()
+        engine.start(at: 0)
+        engine.advance(to: 100)
+        XCTAssertNil(engine.timeLeft)
+    }
+
+    func testSeededStartReplaysIdenticalRounds() {
+        // Different construction seeds, same start seed → identical rounds.
+        let a = makeEngine(alohaChance: 0.4, seed: 1)
+        let b = makeEngine(alohaChance: 0.4, seed: 2)
+        a.start(at: 0, seed: 99)
+        b.start(at: 0, seed: 99)
+        for step in 1...60 {
+            let t = Double(step) * 0.05
+            a.advance(to: t)
+            b.advance(to: t)
+        }
+        XCTAssertFalse(a.targets.isEmpty, "board should be live at the comparison point")
+        XCTAssertEqual(a.targets.map(\.kind), b.targets.map(\.kind))
+        XCTAssertEqual(a.targets.map(\.x), b.targets.map(\.x))
+        XCTAssertEqual(a.lives, b.lives)
+    }
+
     func testResetReturnsToMenu() {
         let engine = makeEngine()
         engine.start(at: 0)

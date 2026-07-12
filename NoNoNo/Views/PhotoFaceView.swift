@@ -1,5 +1,25 @@
 import SwiftUI
 
+/// Every Josh we have, grouped by state of mind. Faces rotate so a fresh
+/// Josh shows up round to round.
+enum FacePool {
+    static let grinning = ["face_angry", "face_grin", "face_drag", "face_squint", "face_mullet"]
+    static let raging = ["face_smashed", "face_party", "face_fancy", "face_wine"]
+    static let defeated = ["face_ko", "face_angel"]
+
+    static func pool(for mood: FaceView.Mood) -> [String] {
+        switch mood {
+        case .grinning: return grinning
+        case .raging: return raging
+        case .defeated: return defeated
+        }
+    }
+
+    static func random(for mood: FaceView.Mood) -> String {
+        pool(for: mood).randomElement() ?? "face_angry"
+    }
+}
+
 /// The real Josh, South Park Canadian style: an actual photo cutout whose
 /// top half flaps open when he yells, Terrance & Phillip physics.
 struct PhotoFaceView: View {
@@ -9,16 +29,13 @@ struct PhotoFaceView: View {
     var talking: Bool = false
 
     @State private var flapUp = false
+    @State private var chosenFace: String?
 
     /// Where the head splits, as a fraction of height from the top.
     private let splitFraction: CGFloat = 0.60
 
     private var imageName: String {
-        switch mood {
-        case .grinning: return "face_angry"     // the signature scrunch
-        case .raging: return "face_smashed"     // JOSH SMASHED
-        case .defeated: return "face_ko"        // horizontal. very smashed.
-        }
+        chosenFace ?? FacePool.pool(for: mood).first ?? "face_angry"
     }
 
     var body: some View {
@@ -49,6 +66,10 @@ struct PhotoFaceView: View {
             Text("🌺🌺🌺").font(.system(size: s * 0.15)).offset(y: s * 0.50)
         }
         .frame(width: s, height: s * 1.06)
+        .onAppear { chosenFace = FacePool.random(for: mood) }
+        .onChange(of: mood) { newMood in
+            chosenFace = FacePool.random(for: newMood)
+        }
         .onChange(of: talking) { isTalking in
             if isTalking {
                 withAnimation(.easeInOut(duration: 0.11).repeatForever(autoreverses: true)) {
