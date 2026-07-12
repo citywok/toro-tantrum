@@ -76,6 +76,7 @@ enum QuoteBank {
         .hibiscus: ["THAT WAS DECORATIVE!"],
         .rainbow: ["HOW DARE YOU. THAT ONE'S SACRED."],
         .cheeseburger: ["NOT THE BURGER!! GODDAMNIT!", "I WAS EATING THAT!"],
+        .tankTop: ["NOT THE TANK TOP!!", "IT'S SLEEVELESS SEASON, GODDAMNIT!"],
     ]
 
     /// How he introduces himself. Formally. In French.

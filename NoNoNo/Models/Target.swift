@@ -25,6 +25,7 @@ enum TargetKind: String, CaseIterable, Equatable {
     case hibiscus
     case rainbow
     case cheeseburger
+    case tankTop
 
     var isRage: Bool {
         switch self {
@@ -32,7 +33,7 @@ enum TargetKind: String, CaseIterable, Equatable {
              .shannon, .badDrivers, .dodTravel, .hoa, .thatSong, .kids, .newDriver,
              .cardio:
             return true
-        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger:
+        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop:
             return false
         }
     }
@@ -61,6 +62,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .hibiscus: return "🌺"
         case .rainbow: return "🌈"
         case .cheeseburger: return "🍔"
+        case .tankTop: return "🎽"
         }
     }
 
@@ -73,7 +75,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .pineapplePizza, .badDrivers, .dodTravel, .hoa, .kids, .newDriver,
              .cardio: return 15
         case .sunscreen, .touristCam, .snowflake: return 10
-        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger: return 0
+        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop: return 0
         }
     }
 
@@ -115,6 +117,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .hibiscus: return "the hibiscus"
         case .rainbow: return "the rainbow"
         case .cheeseburger: return "the cheeseburger"
+        case .tankTop: return "the tank top"
         }
     }
 }
