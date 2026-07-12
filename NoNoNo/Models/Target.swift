@@ -23,13 +23,14 @@ enum TargetKind: String, CaseIterable, Equatable {
     case maiTai
     case hibiscus
     case rainbow
+    case cheeseburger
 
     var isRage: Bool {
         switch self {
         case .redHair, .sunscreen, .dnaTest, .touristCam, .pineapplePizza, .snowflake,
              .shannon, .badDrivers, .dodTravel, .hoa, .thatSong, .kids, .newDriver:
             return true
-        case .switchGame, .maiTai, .hibiscus, .rainbow:
+        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger:
             return false
         }
     }
@@ -56,6 +57,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .maiTai: return "🍹"
         case .hibiscus: return "🌺"
         case .rainbow: return "🌈"
+        case .cheeseburger: return "🍔"
         }
     }
 
@@ -67,7 +69,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .dnaTest, .thatSong: return 20
         case .pineapplePizza, .badDrivers, .dodTravel, .hoa, .kids, .newDriver: return 15
         case .sunscreen, .touristCam, .snowflake: return 10
-        case .switchGame, .maiTai, .hibiscus, .rainbow: return 0
+        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger: return 0
         }
     }
 
@@ -75,6 +77,7 @@ enum TargetKind: String, CaseIterable, Equatable {
     /// these need words, an emoji alone doesn't land the joke.
     var caption: String? {
         switch self {
+        case .pineapplePizza: return "PINEAPPLE PIZZA"
         case .shannon: return "SHANNON L."
         case .badDrivers: return "DRIVERS"
         case .dodTravel: return "DOD TRAVEL"
@@ -105,6 +108,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .maiTai: return "the mai tai"
         case .hibiscus: return "the hibiscus"
         case .rainbow: return "the rainbow"
+        case .cheeseburger: return "the cheeseburger"
         }
     }
 }

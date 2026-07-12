@@ -70,6 +70,7 @@ enum QuoteBank {
         .maiTai: ["MY MAI TAI!! WHY!"],
         .hibiscus: ["THAT WAS DECORATIVE!"],
         .rainbow: ["HOW DARE YOU. THAT ONE'S SACRED."],
+        .cheeseburger: ["NOT THE BURGER!! GODDAMNIT!", "I WAS EATING THAT!"],
     ]
 
     /// How he introduces himself. Formally. In French.
