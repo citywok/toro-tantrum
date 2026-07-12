@@ -136,12 +136,19 @@ struct RageOffFlowView: View {
                         .font(.system(size: 17, weight: .heavy, design: .rounded))
                         .multilineTextAlignment(.center)
                         .foregroundColor(.black)
+                        .textContentType(index == 0 ? .givenName : .name)
                         .autocorrectionDisabled()
                         .padding(.vertical, 10)
                         .background(Capsule().fill(.white.opacity(0.94)))
                 }
             }
             .padding(.horizontal, 44)
+            .onAppear {
+                // The phone's owner is holding it, so they're player 1.
+                if names.first == "PLAYER 1", let guess = PlayerNameGuess.fromDevice() {
+                    names[0] = guess.uppercased()
+                }
+            }
 
             Button(action: startMatch) {
                 Text("START THE RAGE-OFF")

@@ -43,6 +43,12 @@ struct LiveRageOffView: View {
                 break
             }
         }
+        .onAppear {
+            if playerName.trimmingCharacters(in: .whitespaces).isEmpty,
+               let guess = PlayerNameGuess.fromDevice() {
+                playerName = guess.uppercased()
+            }
+        }
         .onDisappear { match.leave() }
         .statusBarHidden(true)
     }
@@ -80,6 +86,7 @@ struct LiveRageOffView: View {
                 .font(.system(size: 17, weight: .heavy, design: .rounded))
                 .multilineTextAlignment(.center)
                 .foregroundColor(.black)
+                .textContentType(.givenName)
                 .autocorrectionDisabled()
                 .disabled(picked)
                 .padding(.vertical, 10)
