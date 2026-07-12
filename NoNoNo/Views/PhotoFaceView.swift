@@ -31,10 +31,12 @@ struct PhotoFaceView: View {
                 .offset(y: s * 0.16)
 
             headHalf(top: false, s: s)
+            // The whole top half lifts straight up with a slight tilt —
+            // Terrance & Phillip style, not a hinge.
             headHalf(top: true, s: s)
-                .rotationEffect(.degrees(flapUp ? -12 : 0),
-                                anchor: UnitPoint(x: 0.06, y: splitFraction))
-                .offset(y: flapUp ? -s * 0.03 : 0)
+                .rotationEffect(.degrees(flapUp ? -6 : 0),
+                                anchor: UnitPoint(x: 0.5, y: splitFraction))
+                .offset(y: flapUp ? -s * 0.11 : 0)
 
             if ginger {
                 Text("🔥").font(.system(size: s * 0.20)).offset(x: -s * 0.38, y: -s * 0.44)
