@@ -41,6 +41,7 @@ final class LiveMatchController: ObservableObject {
     /// Kinds worth shouting across a room.
     static let demandKinds: [TargetKind] = [
         .shannon, .badDrivers, .dodTravel, .hoa, .thatSong, .redHair, .pineapplePizza,
+        .kids, .newDriver,
     ]
 
     init() {

@@ -58,6 +58,14 @@ enum QuoteBank {
             "SKIP IT. SKIP IT NOW.",
             "NOT THAT SONG. NO.",
         ],
+        .kids: [
+            "NOT AT BRUNCH!!",
+            "WHOSE CHILD IS THIS?!",
+        ],
+        .newDriver: [
+            "A LEARNER?! ON MY ROAD?!",
+            "THE STICKER ISN'T A SHIELD!",
+        ],
         .switchGame: ["NOT THE SWITCH! GODDAMNIT!"],
         .maiTai: ["MY MAI TAI!! WHY!"],
         .hibiscus: ["THAT WAS DECORATIVE!"],

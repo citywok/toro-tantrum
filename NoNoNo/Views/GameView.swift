@@ -204,19 +204,19 @@ struct TargetView: View {
                 )
             if let caption = kind.caption {
                 VStack(spacing: -1) {
-                    Text(kind.emoji).font(.system(size: 24))
+                    Text(kind.emoji).font(.system(size: 31))
                     Text(caption)
-                        .font(.system(size: 7.5, weight: .black, design: .rounded))
+                        .font(.system(size: 10, weight: .black, design: .rounded))
                         .foregroundColor(.black)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                 }
-                .padding(.horizontal, 2)
+                .padding(.horizontal, 3)
             } else {
-                Text(kind.emoji).font(.system(size: 34))
+                Text(kind.emoji).font(.system(size: 44))
             }
         }
-        .frame(width: 64, height: 64)
+        .frame(width: 83, height: 83)
         .contentShape(Circle())
         .scaleEffect(appeared ? 1 : 0.3)
         .onAppear {

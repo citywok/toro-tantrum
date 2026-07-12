@@ -260,10 +260,11 @@ final class GameEngine: ObservableObject {
         // dangerous — smacking drunk takes real discipline.
         let pool = rng.unit() < tuning.alohaChance ? TargetKind.alohaKinds : TargetKind.rageKinds
         let kind = pool[rng.int(below: pool.count)]
+        // Margins keep the (larger) target circles fully on the board.
         return SpawnedTarget(id: UUID(),
                              kind: kind,
-                             x: 0.10 + rng.unit() * 0.80,
-                             y: 0.08 + rng.unit() * 0.82,
+                             x: 0.13 + rng.unit() * 0.74,
+                             y: 0.10 + rng.unit() * 0.78,
                              expiresAt: now + targetLifetime)
     }
 }

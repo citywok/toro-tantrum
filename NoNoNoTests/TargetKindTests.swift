@@ -33,7 +33,8 @@ final class TargetKindTests: XCTestCase {
     }
 
     func testHateListTargetsHaveCaptionsAndAlohaDoNot() {
-        for kind in [TargetKind.shannon, .badDrivers, .dodTravel, .hoa, .thatSong] {
+        for kind in [TargetKind.shannon, .badDrivers, .dodTravel, .hoa, .thatSong,
+                     .kids, .newDriver] {
             XCTAssertTrue(kind.isRage)
             XCTAssertNotNil(kind.caption, "\(kind) needs its caption to land the joke")
         }

@@ -16,6 +16,8 @@ enum TargetKind: String, CaseIterable, Equatable {
     case dodTravel
     case hoa
     case thatSong
+    case kids
+    case newDriver
     // Aloha targets — DO NOT SMACK
     case switchGame
     case maiTai
@@ -25,7 +27,7 @@ enum TargetKind: String, CaseIterable, Equatable {
     var isRage: Bool {
         switch self {
         case .redHair, .sunscreen, .dnaTest, .touristCam, .pineapplePizza, .snowflake,
-             .shannon, .badDrivers, .dodTravel, .hoa, .thatSong:
+             .shannon, .badDrivers, .dodTravel, .hoa, .thatSong, .kids, .newDriver:
             return true
         case .switchGame, .maiTai, .hibiscus, .rainbow:
             return false
@@ -48,6 +50,8 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .dodTravel: return "✈️"
         case .hoa: return "🏘️"
         case .thatSong: return "🎵"
+        case .kids: return "🧒"
+        case .newDriver: return "🔰"
         case .switchGame: return "🎮"
         case .maiTai: return "🍹"
         case .hibiscus: return "🌺"
@@ -61,7 +65,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         switch self {
         case .redHair, .shannon: return 25
         case .dnaTest, .thatSong: return 20
-        case .pineapplePizza, .badDrivers, .dodTravel, .hoa: return 15
+        case .pineapplePizza, .badDrivers, .dodTravel, .hoa, .kids, .newDriver: return 15
         case .sunscreen, .touristCam, .snowflake: return 10
         case .switchGame, .maiTai, .hibiscus, .rainbow: return 0
         }
@@ -76,6 +80,8 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .dodTravel: return "DOD TRAVEL"
         case .hoa: return "THE HOA"
         case .thatSong: return "THAT SONG"
+        case .kids: return "KIDS"
+        case .newDriver: return "NEW DRIVER"
         default: return nil
         }
     }
@@ -93,6 +99,8 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .dodTravel: return "DoD travel booking"
         case .hoa: return "the HOA"
         case .thatSong: return "that song"
+        case .kids: return "kids"
+        case .newDriver: return "the new driver bumper sticker"
         case .switchGame: return "the Switch"
         case .maiTai: return "the mai tai"
         case .hibiscus: return "the hibiscus"
