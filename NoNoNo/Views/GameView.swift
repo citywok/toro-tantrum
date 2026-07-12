@@ -6,6 +6,8 @@ struct GameView: View {
     var hapticsOn: Bool
     var soundOn: Bool
     var voiceOn: Bool
+    /// Live multiplayer hook: called after every landed smack.
+    var onSmack: ((TargetKind, GameEngine.SmackResult) -> Void)?
 
     @State private var quote = QuoteBank.intro
     @State private var bursts: [Burst] = []
@@ -145,6 +147,7 @@ struct GameView: View {
     private func smack(_ target: SpawnedTarget, in size: CGSize) {
         let now = Date().timeIntervalSinceReferenceDate
         guard let result = engine.smack(target.id, at: now) else { return }
+        onSmack?(target.kind, result)
 
         // Mistakes (lostLife) are handled by the lastLifeLoss watchers.
         if !result.lostLife {

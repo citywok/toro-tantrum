@@ -9,6 +9,7 @@ struct RootView: View {
     @AppStorage("soundOn") private var soundOn = true
     @State private var showSettings = false
     @State private var showRageOff = false
+    @State private var showLiveRageOff = false
     @State private var lastGameWasHighScore = false
     @State private var saidIntro = false
 
@@ -25,6 +26,7 @@ struct RootView: View {
                         engine.start(at: Date().timeIntervalSinceReferenceDate)
                     },
                     onRageOff: { showRageOff = true },
+                    onLiveRageOff: { showLiveRageOff = true },
                     onSettings: { showSettings = true }
                 )
             case .playing:
@@ -73,6 +75,11 @@ struct RootView: View {
             RageOffFlowView(gingerMode: gingerMode, hapticsOn: hapticsOn,
                             soundOn: soundOn, voiceOn: voiceOn, scores: scores,
                             onExit: { showRageOff = false })
+        }
+        .fullScreenCover(isPresented: $showLiveRageOff) {
+            LiveRageOffView(gingerMode: gingerMode, hapticsOn: hapticsOn,
+                            soundOn: soundOn, voiceOn: voiceOn, scores: scores,
+                            onExit: { showLiveRageOff = false })
         }
         .statusBarHidden(true)
     }

@@ -5,6 +5,7 @@ struct StartView: View {
     var gingerMode: Bool
     var onStart: () -> Void
     var onRageOff: () -> Void
+    var onLiveRageOff: () -> Void
     var onSettings: () -> Void
 
     @State private var wobble = false
@@ -59,14 +60,25 @@ struct StartView: View {
             }
             .accessibilityIdentifier("startButton")
 
-            Button(action: onRageOff) {
-                Text("RAGE-OFF · PASS THE PHONE")
-                    .font(.system(size: 15, weight: .black, design: .rounded))
+            Button(action: onLiveRageOff) {
+                Text("🗣 RAGE-OFF LIVE · OWN PHONES")
+                    .font(.system(size: 16, weight: .black, design: .rounded))
                     .foregroundColor(.white)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 24)
-                    .background(Capsule().fill(Color.black.opacity(0.35)))
-                    .overlay(Capsule().stroke(.white.opacity(0.75), lineWidth: 2))
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 26)
+                    .background(Capsule().fill(Color(red: 0.10, green: 0.35, blue: 0.55)))
+                    .overlay(Capsule().stroke(.white, lineWidth: 2.5))
+            }
+            .accessibilityIdentifier("liveRageOffButton")
+
+            Button(action: onRageOff) {
+                Text("rage-off · one phone")
+                    .font(.system(size: 13, weight: .black, design: .rounded))
+                    .foregroundColor(.white.opacity(0.9))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 20)
+                    .background(Capsule().fill(Color.black.opacity(0.3)))
+                    .overlay(Capsule().stroke(.white.opacity(0.6), lineWidth: 2))
             }
             .accessibilityIdentifier("rageOffButton")
 

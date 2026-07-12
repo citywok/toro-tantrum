@@ -213,6 +213,34 @@ final class GameEngine: ObservableObject {
                            lostLife: false, enteredRageMode: enteredRage)
     }
 
+    // MARK: - Live multiplayer effects
+
+    /// External bonus (JOSH DEMANDS fulfilled, schadenfreude, etc.).
+    func awardBonus(_ points: Int) {
+        guard phase == .playing else { return }
+        score += points
+    }
+
+    /// Penalty for failing a demand: the smash meter takes a hit.
+    func drainRage() {
+        guard phase == .playing, !isRageMode else { return }
+        rage = max(0, rage - 0.5)
+    }
+
+    /// Sabotage from an opponent: dangerous aloha decoys dropped on the board.
+    /// Allowed to overflow maxTargetsOnScreen a little — that's the point.
+    func spawnDecoys(_ count: Int, at now: TimeInterval) {
+        guard phase == .playing else { return }
+        for _ in 0..<count where targets.count < tuning.maxTargetsOnScreen + 3 {
+            let kind = TargetKind.alohaKinds[rng.int(below: TargetKind.alohaKinds.count)]
+            targets.append(SpawnedTarget(id: UUID(),
+                                         kind: kind,
+                                         x: 0.10 + rng.unit() * 0.80,
+                                         y: 0.08 + rng.unit() * 0.82,
+                                         expiresAt: now + targetLifetime))
+        }
+    }
+
     private func recordLifeLoss(_ cause: LifeLossEvent.Cause, kind: TargetKind) {
         lifeLossSeq += 1
         lastLifeLoss = LifeLossEvent(cause: cause, kind: kind, seq: lifeLossSeq)

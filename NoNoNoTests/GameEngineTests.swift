@@ -262,6 +262,31 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(a.lives, b.lives)
     }
 
+    func testAwardBonusOnlyWhilePlaying() {
+        let engine = makeEngine()
+        engine.awardBonus(100)
+        XCTAssertEqual(engine.score, 0, "no bonus before the game starts")
+        engine.start(at: 0)
+        engine.awardBonus(100)
+        XCTAssertEqual(engine.score, 100)
+    }
+
+    func testDrainRageFloorsAtZero() {
+        let engine = makeEngine()
+        engine.start(at: 0)
+        engine.drainRage()
+        XCTAssertEqual(engine.rage, 0)
+    }
+
+    func testSpawnDecoysAddsAlohaTargetsWithOverflow() {
+        let engine = makeEngine()
+        engine.start(at: 0)
+        engine.spawnDecoys(2, at: 0.1)
+        let decoys = engine.targets.filter { !$0.kind.isRage }
+        XCTAssertEqual(decoys.count, 2)
+        XCTAssertLessThanOrEqual(engine.targets.count, Tuning().maxTargetsOnScreen + 3)
+    }
+
     func testResetReturnsToMenu() {
         let engine = makeEngine()
         engine.start(at: 0)

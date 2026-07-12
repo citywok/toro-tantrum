@@ -34,6 +34,15 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<!-- RAGE-OFF LIVE: local multiplayer over MultipeerConnectivity.
+	     Both keys are required on iOS 14+ or peer discovery silently fails. -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>NO NO NO! uses the local network to find nearby friends for RAGE-OFF LIVE multiplayer.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_nonono-rage._tcp</string>
+		<string>_nonono-rage._udp</string>
+	</array>
 	<!-- Portrait-only smack-em-up: opt out of iPad multitasking so all four
 	     orientations aren't required. -->
 	<key>UIRequiresFullScreen</key>

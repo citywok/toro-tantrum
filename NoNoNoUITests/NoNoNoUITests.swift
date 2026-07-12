@@ -44,6 +44,26 @@ final class NoNoNoUITests: XCTestCase {
                       "handoff screen missing")
     }
 
+    func testLiveRageOffLobbyOpens() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let live = element(app, "liveRageOffButton")
+        XCTAssertTrue(live.waitForExistence(timeout: 10), "live rage-off button missing")
+        live.tap()
+
+        XCTAssertTrue(element(app, "hostButton").waitForExistence(timeout: 5),
+                      "live lobby HOST button missing")
+        XCTAssertTrue(element(app, "joinButton").waitForExistence(timeout: 5),
+                      "live lobby JOIN button missing")
+
+        let exit = element(app, "exitLiveButton")
+        XCTAssertTrue(exit.waitForExistence(timeout: 5))
+        exit.tap()
+        XCTAssertTrue(element(app, "startButton").waitForExistence(timeout: 5),
+                      "did not return to menu from live lobby")
+    }
+
     func testSettingsOpensAndCloses() throws {
         let app = XCUIApplication()
         app.launch()
