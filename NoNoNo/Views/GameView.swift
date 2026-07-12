@@ -150,7 +150,15 @@ struct GameView: View {
                     : SoundKit.shared.smack(combo: engine.combo)
             }
             if voiceOn {
-                result.enteredRageMode ? VoiceBox.shared.sayRage() : VoiceBox.shared.sayNo()
+                if result.enteredRageMode {
+                    VoiceBox.shared.sayRage()
+                } else if target.kind.isRage {
+                    // Red target: he's saying no to the thing.
+                    VoiceBox.shared.sayNo()
+                } else {
+                    // Green target (smashed-mode bonus): still his mistake noise.
+                    VoiceBox.shared.sayGoddamnit()
+                }
             }
             if result.enteredRageMode {
                 quote = QuoteBank.rageModeStart.randomElement() ?? "JOSH SMASHED!!"
