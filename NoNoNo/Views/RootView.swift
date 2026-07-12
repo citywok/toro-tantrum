@@ -8,7 +8,6 @@ struct RootView: View {
     @AppStorage("voiceOn") private var voiceOn = true
     @AppStorage("soundOn") private var soundOn = true
     @State private var showSettings = false
-    @State private var showRageOff = false
     @State private var showLiveRageOff = false
     @State private var lastGameWasHighScore = false
     @State private var saidIntro = false
@@ -25,7 +24,6 @@ struct RootView: View {
                         if voiceOn { VoiceBox.shared.sayIntro() }
                         engine.start(at: Date().timeIntervalSinceReferenceDate)
                     },
-                    onRageOff: { showRageOff = true },
                     onLiveRageOff: { showLiveRageOff = true },
                     onSettings: { showSettings = true }
                 )
@@ -70,11 +68,6 @@ struct RootView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(gingerMode: $gingerMode, hapticsOn: $hapticsOn,
                          voiceOn: $voiceOn, soundOn: $soundOn)
-        }
-        .fullScreenCover(isPresented: $showRageOff) {
-            RageOffFlowView(gingerMode: gingerMode, hapticsOn: hapticsOn,
-                            soundOn: soundOn, voiceOn: voiceOn, scores: scores,
-                            onExit: { showRageOff = false })
         }
         .fullScreenCover(isPresented: $showLiveRageOff) {
             LiveRageOffView(gingerMode: gingerMode, hapticsOn: hapticsOn,

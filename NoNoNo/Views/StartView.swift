@@ -4,7 +4,6 @@ struct StartView: View {
     var highScore: Int
     var gingerMode: Bool
     var onStart: () -> Void
-    var onRageOff: () -> Void
     var onLiveRageOff: () -> Void
     var onSettings: () -> Void
 
@@ -70,17 +69,6 @@ struct StartView: View {
                     .overlay(Capsule().stroke(.white, lineWidth: 2.5))
             }
             .accessibilityIdentifier("liveRageOffButton")
-
-            Button(action: onRageOff) {
-                Text("rage-off · one phone")
-                    .font(.system(size: 13, weight: .black, design: .rounded))
-                    .foregroundColor(.white.opacity(0.9))
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 20)
-                    .background(Capsule().fill(Color.black.opacity(0.3)))
-                    .overlay(Capsule().stroke(.white.opacity(0.6), lineWidth: 2))
-            }
-            .accessibilityIdentifier("rageOffButton")
 
             if highScore > 0 {
                 Text("HIGH SCORE: \(highScore)")
