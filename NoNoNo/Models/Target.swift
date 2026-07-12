@@ -81,6 +81,7 @@ enum TargetKind: String, CaseIterable, Equatable {
     /// these need words, an emoji alone doesn't land the joke.
     var caption: String? {
         switch self {
+        case .redHair: return "A REDHEAD"
         case .shannon: return "SHANNON LEDDY"
         case .badDrivers: return "DRIVERS"
         case .dodTravel: return "DOD TRAVEL"

@@ -217,6 +217,19 @@ struct TargetView: View {
     @ViewBuilder
     private var targetFace: some View {
         switch kind {
+        case .redHair:
+            // A picture of a real redhead. The realest one available.
+            VStack(spacing: 0) {
+                Image("face_squint")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 48, height: 48)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(.black, lineWidth: 2))
+                Text("A REDHEAD")
+                    .font(.system(size: 9, weight: .black, design: .rounded))
+                    .foregroundColor(.black)
+            }
         case .newDriver:
             StudentDriverSticker()
         case .kids:
