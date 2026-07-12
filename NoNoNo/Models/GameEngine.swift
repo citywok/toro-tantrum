@@ -184,7 +184,9 @@ final class GameEngine: ObservableObject {
     }
 
     private func makeTarget(at now: TimeInterval) -> SpawnedTarget {
-        let alohaChance = isRageMode ? 0.05 : tuning.alohaChance
+        // The frenzy is nearly all smackable targets, but never spawns aloha
+        // targets more often than normal play would.
+        let alohaChance = isRageMode ? min(tuning.alohaChance, 0.05) : tuning.alohaChance
         let pool = rng.unit() < alohaChance ? TargetKind.alohaKinds : TargetKind.rageKinds
         let kind = pool[rng.int(below: pool.count)]
         return SpawnedTarget(id: UUID(),
