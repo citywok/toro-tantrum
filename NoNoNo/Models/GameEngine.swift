@@ -156,14 +156,8 @@ final class GameEngine: ObservableObject {
         let target = targets.remove(at: index)
 
         guard target.kind.isRage else {
-            // JOSH SMASHED: while he's smashed he'll smack anything, even
-            // his own mai tai. Bonus points, no consequences. Like Josh.
-            if isRageMode {
-                let points = 15
-                score += points
-                return SmackResult(kind: target.kind, pointsAwarded: points,
-                                   lostLife: false, enteredRageMode: false)
-            }
+            // Smacking something he loves is always a mistake, even while
+            // JOSH SMASHED — being drunk is not a defense.
             combo = 0
             score = max(0, score - 50)
             rage = max(0, rage - 0.25)
@@ -211,8 +205,8 @@ final class GameEngine: ObservableObject {
     }
 
     private func makeTarget(at now: TimeInterval) -> SpawnedTarget {
-        // Aloha targets keep spawning during JOSH SMASHED mode — they flip
-        // from hazards to bonus targets there, so the rate stays the same.
+        // Aloha targets keep spawning during JOSH SMASHED mode and stay
+        // dangerous — smacking drunk takes real discipline.
         let pool = rng.unit() < tuning.alohaChance ? TargetKind.alohaKinds : TargetKind.rageKinds
         let kind = pool[rng.int(below: pool.count)]
         return SpawnedTarget(id: UUID(),

@@ -149,16 +149,10 @@ struct GameView: View {
                     ? SoundKit.shared.rageStart()
                     : SoundKit.shared.smack(combo: engine.combo)
             }
+            // Only red targets reach here now — green taps always lose a life
+            // and get their "god damn it!" from the lastLifeLoss watcher.
             if voiceOn {
-                if result.enteredRageMode {
-                    VoiceBox.shared.sayRage()
-                } else if target.kind.isRage {
-                    // Red target: he's saying no to the thing.
-                    VoiceBox.shared.sayNo()
-                } else {
-                    // Green target (smashed-mode bonus): still his mistake noise.
-                    VoiceBox.shared.sayGoddamnit()
-                }
+                result.enteredRageMode ? VoiceBox.shared.sayRage() : VoiceBox.shared.sayNo()
             }
             if result.enteredRageMode {
                 quote = QuoteBank.rageModeStart.randomElement() ?? "JOSH SMASHED!!"

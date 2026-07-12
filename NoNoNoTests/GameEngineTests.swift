@@ -204,7 +204,7 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(engine.lastLifeLoss?.seq, 2)
     }
 
-    func testJoshSmashedMakesAlohaTargetsBonus() {
+    func testGreenTargetsStillCostALifeWhileJoshSmashed() {
         let engine = makeEngine(alohaChance: 0.5, seed: 7) { tuning in
             tuning.ragePerSmack = 1.0
             tuning.rageDuration = 600
@@ -217,16 +217,14 @@ final class GameEngineTests: XCTestCase {
         _ = engine.smack(rageTarget.id, at: time)
         XCTAssertTrue(engine.isRageMode)
 
-        // While smashed, smacking his own mai tai is a bonus, not a mistake.
+        // Being drunk is not a defense: green taps still cost a life.
         let alohaTarget = waitForTarget(engine, from: &time) { !$0.kind.isRage }
         let livesBefore = engine.lives
-        let scoreBefore = engine.score
         let result = engine.smack(alohaTarget.id, at: time)
 
-        XCTAssertEqual(result?.lostLife, false)
-        XCTAssertEqual(engine.lives, livesBefore)
-        XCTAssertGreaterThan(engine.score, scoreBefore)
-        XCTAssertNil(engine.lastLifeLoss)
+        XCTAssertEqual(result?.lostLife, true)
+        XCTAssertEqual(engine.lives, livesBefore - 1)
+        XCTAssertEqual(engine.lastLifeLoss?.cause, .badTap)
     }
 
     func testResetReturnsToMenu() {
