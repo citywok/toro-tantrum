@@ -36,6 +36,7 @@ final class LiveMatchController: ObservableObject {
     private var session: MultipeerSession?
     private var peerNames: [String: String] = [:]  // peer displayName → roster name
     private var demandTimer: Timer?
+    private var countdownTimer: Timer?
     private var cancellables: Set<AnyCancellable> = []
 
     /// Kinds worth shouting across a room.
@@ -90,7 +91,15 @@ final class LiveMatchController: ObservableObject {
     }
 
     func leave() {
+        countdownTimer?.invalidate()
         demandTimer?.invalidate()
+        engine.reset()
+        stage = .lobby
+        countdown = 3
+        flash = nil
+        activeDemand = nil
+        opponentScores = [:]
+        finals = [:]
         session?.stop()
         session = nil
     }
@@ -226,7 +235,8 @@ final class LiveMatchController: ObservableObject {
         flash = nil
         stage = .countdown
         countdown = Int(delay.rounded())
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+        countdownTimer?.invalidate()
+        countdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
             guard let self else { timer.invalidate(); return }
             self.countdown -= 1
             if self.countdown <= 0 {
