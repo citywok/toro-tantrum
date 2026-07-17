@@ -15,6 +15,10 @@ struct GameView: View {
     @State private var shakePhase: CGFloat = 0
     @State private var talking = false
     @State private var talkUntil = Date.distantPast
+    @State private var lastComboValue = 0
+    @State private var comboCallout: (String, Color)? = nil
+    @State private var extraLifeCallout = false
+    @State private var pulseOpacity: CGFloat = 0.6
 
     private let tick = Timer.publish(every: 1.0 / 30.0, on: .main, in: .common).autoconnect()
 
@@ -46,12 +50,36 @@ struct GameView: View {
                             .position(x: smash.x, y: smash.y)
                     }
                     ForEach(bursts) { burst in
-                        Text(burst.text)
-                            .font(.system(size: 24, weight: .black, design: .rounded))
-                            .foregroundColor(burst.color)
-                            .shadow(color: .black.opacity(0.4), radius: 0, x: 1, y: 2)
-                            .position(x: burst.x, y: burst.y)
-                            .transition(.opacity)
+                        BurstView(text: burst.text, color: burst.color, x: burst.x, y: burst.y)
+                    }
+                    // ── Arcade countdown overlay ──
+                    if engine.countdownSeconds > 0 {
+                        ZStack {
+                            Color.black.opacity(0.3)
+                            Text(engine.countdownSeconds > 1 ? "\(engine.countdownSeconds)" : "GO!")
+                                .font(.system(size: 100, weight: .black, design: .rounded))
+                                .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.5), radius: 0, x: 4, y: 6)
+                        }
+                        .transition(.opacity)
+                    }
+                    // ── Combo milestone callout ──
+                    if let (text, color) = comboCallout {
+                        Text(text)
+                            .font(.system(size: 56, weight: .black, design: .rounded))
+                            .foregroundColor(color)
+                            .shadow(color: .black.opacity(0.6), radius: 0, x: 3, y: 4)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                    // ── Extra life celebration ──
+                    if extraLifeCallout {
+                        Text("+1 ❤️")
+                            .font(.system(size: 44, weight: .black, design: .rounded))
+                            .foregroundColor(.green)
+                            .shadow(color: .black.opacity(0.5), radius: 0, x: 3, y: 4)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .transition(.scale.combined(with: .opacity))
                     }
                 }
                 .animation(.spring(response: 0.25, dampingFraction: 0.6), value: engine.targets)
@@ -64,25 +92,90 @@ struct GameView: View {
         }
         .padding(.top, 8)
         .overlay(rageBorder)
-        .onAppear { flapFor(1.6) }
+        .onAppear {
+            flapFor(1.6)
+            updateMusicIntensity()
+        }
         .onReceive(tick) { _ in
             engine.advance(to: Date().timeIntervalSinceReferenceDate)
             let nowTalking = Date() < talkUntil
             if talking != nowTalking { talking = nowTalking }
         }
-        // Any mistake — bad tap or escaped target — gets the catchphrase,
-        // immediately. Haptics/sounds/voice live in RootView so they survive
-        // the final life loss removing this view.
+        // Any mistake — bad tap or escaped target — gets the catchphrase
+        // and a board shake. Haptics/sounds/voice live in RootView so they
+        // survive the final life loss removing this view.
         .onChange(of: engine.lastLifeLoss) { event in
             guard let event else { return }
             quote = event.cause == .badTap ? QuoteBank.badTapMistake : QuoteBank.mistake
+            withAnimation(.linear(duration: 0.22)) {
+                shakePhase += 3
+            }
             flapFor(1.0)
+        }
+        // ── Combo milestone detection ──
+        .onChange(of: engine.combo) { newCombo in
+            let prev = lastComboValue
+            lastComboValue = newCombo
+            // Combo broken?
+            if newCombo < prev && prev >= 5 {
+                withAnimation {
+                    comboCallout = ("COMBO BROKEN!", .red)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                    withAnimation { comboCallout = nil }
+                }
+            } else if newCombo >= 20 && prev < 20 {
+                withAnimation { comboCallout = ("MONSTER COMBO!!!", .purple) }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    withAnimation { comboCallout = nil }
+                }
+            } else if newCombo >= 15 && prev < 15 {
+                withAnimation { comboCallout = ("AMAZING!", .orange) }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                    withAnimation { comboCallout = nil }
+                }
+            } else if newCombo >= 10 && prev < 10 {
+                withAnimation { comboCallout = ("GREAT!", .yellow) }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    withAnimation { comboCallout = nil }
+                }
+            } else if newCombo >= 5 && prev < 5 {
+                withAnimation { comboCallout = ("NICE!", .green) }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                    withAnimation { comboCallout = nil }
+                }
+            }
+            // ── Dynamic music intensity ──
+            updateMusicIntensity()
+        }
+        // ── Extra life celebration ──
+        .onChange(of: engine.extraLifeCount) { _ in
+            withAnimation {
+                extraLifeCallout = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                withAnimation { extraLifeCallout = false }
+            }
+        }
+        // ── Dynamic music intensity on rage mode toggle ──
+        .onChange(of: engine.isRageMode) { _ in
+            updateMusicIntensity()
         }
     }
 
     private func flapFor(_ seconds: TimeInterval) {
         talkUntil = Date().addingTimeInterval(seconds)
         talking = true
+    }
+
+    private func updateMusicIntensity() {
+        if engine.isRageMode {
+            SoundKit.shared.setMusicIntensity(.rage)
+        } else if engine.combo >= 10 {
+            SoundKit.shared.setMusicIntensity(.intense)
+        } else {
+            SoundKit.shared.setMusicIntensity(.normal)
+        }
     }
 
     private var hud: some View {
@@ -129,6 +222,21 @@ struct GameView: View {
                     .font(.system(size: 9, weight: .black))
                     .foregroundColor(.white.opacity(0.95))
             )
+            // ── Rage meter pulse when near full ──
+            .overlay(
+                Group {
+                    if engine.rage > 0.8 && !engine.isRageMode {
+                        Capsule()
+                            .stroke(Color.yellow, lineWidth: 2.5)
+                            .opacity(pulseOpacity)
+                    }
+                }
+            )
+            .onAppear {
+                withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+                    pulseOpacity = 0.15
+                }
+            }
         }
         .padding(.horizontal)
     }
@@ -241,6 +349,33 @@ struct SmashBurstView: View {
         .onAppear {
             withAnimation(.easeOut(duration: 0.5)) { boom = true }
         }
+    }
+}
+
+/// Score popup that flies upward and fades out.
+struct BurstView: View {
+    let text: String
+    let color: Color
+    let x: CGFloat
+    let y: CGFloat
+
+    @State private var flyOffset: CGFloat = 0
+    @State private var opacity: CGFloat = 1
+
+    var body: some View {
+        Text(text)
+            .font(.system(size: 28, weight: .black, design: .rounded))
+            .foregroundColor(color)
+            .shadow(color: .black.opacity(0.4), radius: 0, x: 1, y: 2)
+            .position(x: x, y: y + flyOffset)
+            .opacity(opacity)
+            .allowsHitTesting(false)
+            .onAppear {
+                withAnimation(.easeOut(duration: 0.5)) {
+                    flyOffset = -44
+                    opacity = 0
+                }
+            }
     }
 }
 

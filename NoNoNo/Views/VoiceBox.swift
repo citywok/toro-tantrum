@@ -26,7 +26,7 @@ final class VoiceBox {
     }
 
     func sayGameOver() {
-        speak("josh smashed. god dammit.")
+        speak("josh smasht. god dammit.")
     }
 
     /// Spoken on the start screen: "je mapelle josh smash" (French-ified).

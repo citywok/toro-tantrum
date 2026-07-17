@@ -66,6 +66,14 @@ final class GameEngine: ObservableObject {
     @Published private(set) var isRageMode = false
     @Published private(set) var targets: [SpawnedTarget] = []
     @Published private(set) var smacks = 0
+    /// Arcade countdown: 3, 2, 1, 0 (0 = go, nil = no countdown).
+    @Published private(set) var countdownSeconds = 0
+    /// Incremented on each extra life awarded (score milestones).
+    @Published private(set) var extraLifeCount = 0
+    /// Total smack() calls — includes bad taps.
+    @Published private(set) var totalTaps = 0
+    /// Number of rage modes triggered this run.
+    @Published private(set) var rageModeCount = 0
 
     /// Emitted on every life loss so the UI can react (yell) per cause.
     struct LifeLossEvent: Equatable {
@@ -86,6 +94,8 @@ final class GameEngine: ObservableObject {
     private var rng: SplitMix64
     private var nextSpawnAt: TimeInterval = 0
     private var rageEndsAt: TimeInterval = 0
+    private var countdownStartedAt: TimeInterval = 0
+    private var nextLifeAt = 1000
 
     init(tuning: Tuning = Tuning(), seed: UInt64? = nil) {
         self.tuning = tuning
@@ -121,10 +131,16 @@ final class GameEngine: ObservableObject {
         isRageMode = false
         targets = []
         smacks = 0
+        totalTaps = 0
+        rageModeCount = 0
+        extraLifeCount = 0
         lastLifeLoss = nil
         roundEndsAt = tuning.roundDuration.map { now + $0 }
         timeLeft = tuning.roundDuration
-        nextSpawnAt = now + 0.4
+        countdownSeconds = 3
+        countdownStartedAt = now
+        nextLifeAt = 1000
+        nextSpawnAt = now + 0.4 + 3.0  // 3-second arcade countdown delay
         phase = .playing
     }
 
@@ -136,6 +152,16 @@ final class GameEngine: ObservableObject {
     /// Drive the game clock forward. Call from a display-rate timer.
     func advance(to now: TimeInterval) {
         guard phase == .playing else { return }
+
+        // Arcade countdown: 3… 2… 1… GO!
+        if countdownSeconds > 0 {
+            let elapsed = now - countdownStartedAt
+            let remaining = max(0, 3 - Int(elapsed))
+            if remaining != countdownSeconds {
+                countdownSeconds = remaining
+            }
+            if countdownSeconds > 0 { return }  // Don't spawn/expire during countdown
+        }
 
         if let end = roundEndsAt {
             timeLeft = max(0, end - now)
@@ -178,6 +204,8 @@ final class GameEngine: ObservableObject {
               let index = targets.firstIndex(where: { $0.id == id }) else { return nil }
         let target = targets.remove(at: index)
 
+        totalTaps += 1
+
         guard target.kind.isRage else {
             // Smacking something he loves is always a mistake, even while
             // JOSH SMASHED — being drunk is not a defense.
@@ -199,6 +227,13 @@ final class GameEngine: ObservableObject {
         if isRageMode { points *= 2 }
         score += points
 
+        // Extra life every 1000 points (arcade-style)
+        if score >= nextLifeAt {
+            lives = min(lives + 1, tuning.startLives)
+            nextLifeAt += 1000
+            extraLifeCount += 1
+        }
+
         var enteredRage = false
         if !isRageMode {
             rage = min(1, rage + tuning.ragePerSmack)
@@ -206,6 +241,7 @@ final class GameEngine: ObservableObject {
                 isRageMode = true
                 rageEndsAt = now + tuning.rageDuration
                 enteredRage = true
+                rageModeCount += 1
             }
         }
 
