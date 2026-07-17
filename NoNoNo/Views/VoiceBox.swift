@@ -26,7 +26,7 @@ final class VoiceBox {
     }
 
     func sayGameOver() {
-        speak("game over. god damn it.")
+        speak("josh smashed!")
     }
 
     /// The formal introduction, delivered in confident, terrible
