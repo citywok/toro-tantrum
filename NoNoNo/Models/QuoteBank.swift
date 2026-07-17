@@ -38,9 +38,10 @@ enum QuoteBank {
             "THAT'S WHY I MOVED!",
             "NOT EVEN ONCE.",
         ],
-        .shannon: [
-            "NOT TODAY, SHANNON.",
-            "SHE KNOWS WHAT SHE DID.",
+        .realityTv: [
+            "IT'S NOT REALITY, GODDAMNIT!",
+            "SCRIPTED. PRODUCED. FAKE.",
+            "90 DAY FIANCÉ?! 90 DAYS TOO MANY!",
         ],
         .badDrivers: [
             "USE YOUR BLINKER!!",
@@ -81,6 +82,12 @@ enum QuoteBank {
             "NOT THE DRAG QUEEN!!",
             "THAT'S ART, GODDAMNIT!",
             "THE NAILS! THE BEAT! RESPECT IT!",
+        ],
+        .southPark: [
+            "SCREW YOU GUYS, I'M GOING HOME.",
+            "CARTMAN APPROVES.",
+            "OH MY GOD, THEY KILLED KENNY!",
+            "YOU BASTARDS!",
         ],
     ]
 

@@ -9,7 +9,6 @@ enum TargetKind: String, CaseIterable, Equatable {
     case touristCam
     case snowflake
     // From the group chat's verified list of things Josh hates
-    case shannon
     case badDrivers
     case dodTravel
     case hoa
@@ -17,6 +16,7 @@ enum TargetKind: String, CaseIterable, Equatable {
     case kids
     case newDriver
     case cardio
+    case realityTv
     // Aloha targets — DO NOT SMACK
     case switchGame
     case maiTai
@@ -28,15 +28,16 @@ enum TargetKind: String, CaseIterable, Equatable {
     // Pizza and sunscreen have been promoted to aloha targets
     case pineapplePizza
     case sunscreen
+    case southPark
 
     var isRage: Bool {
         switch self {
         case .redHair, .dnaTest, .touristCam, .snowflake,
-             .shannon, .badDrivers, .dodTravel, .hoa, .thatSong, .kids, .newDriver,
-             .cardio:
+             .badDrivers, .dodTravel, .hoa, .thatSong, .kids, .newDriver,
+             .cardio, .realityTv:
             return true
         case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop,
-             .dragQueen, .pineapplePizza, .sunscreen:
+             .dragQueen, .pineapplePizza, .sunscreen, .southPark:
             return false
         }
     }
@@ -52,7 +53,6 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .touristCam: return "📸"
         case .pineapplePizza: return "🍕"
         case .snowflake: return "❄️"
-        case .shannon: return "📛"
         case .badDrivers: return "🚗"
         case .dodTravel: return "✈️"
         case .hoa: return "🏘️"
@@ -60,6 +60,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .kids: return "👶"
         case .newDriver: return "🔰"
         case .cardio: return "🏃"
+        case .realityTv: return "📺"
         case .switchGame: return "🎮"
         case .maiTai: return "🍹"
         case .hibiscus: return "🌺"
@@ -67,6 +68,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .cheeseburger: return "🍔"
         case .tankTop: return "🎽"
         case .dragQueen: return "💅"
+        case .southPark: return "🟤"
         }
     }
 
@@ -74,13 +76,13 @@ enum TargetKind: String, CaseIterable, Equatable {
     /// the engine applies a penalty instead.
     var points: Int {
         switch self {
-        case .redHair, .shannon: return 25
+        case .redHair: return 25
         case .dnaTest, .thatSong: return 20
         case .badDrivers, .dodTravel, .hoa, .kids, .newDriver,
-             .cardio: return 15
+             .cardio, .realityTv: return 15
         case .touristCam, .snowflake: return 10
         case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop,
-             .dragQueen, .pineapplePizza, .sunscreen: return 0
+             .dragQueen, .pineapplePizza, .sunscreen, .southPark: return 0
         }
     }
 
@@ -89,7 +91,6 @@ enum TargetKind: String, CaseIterable, Equatable {
     var caption: String? {
         switch self {
         case .redHair: return "A REDHEAD"
-        case .shannon: return "SHANNON LEDDY"
         case .badDrivers: return "DRIVERS"
         case .dodTravel: return "DOD TRAVEL"
         case .hoa: return "THE HOA"
@@ -97,6 +98,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .kids: return "KIDS"
         case .newDriver: return "STUDENT DRIVER"
         case .cardio: return "CARDIO"
+        case .realityTv: return "REALITY TV"
         default: return nil
         }
     }
@@ -109,7 +111,6 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .touristCam: return "tourist camera"
         case .pineapplePizza: return "pineapple pizza"
         case .snowflake: return "snowflake"
-        case .shannon: return "Shannon"
         case .badDrivers: return "people driving in his vicinity"
         case .dodTravel: return "DoD travel booking"
         case .hoa: return "the HOA"
@@ -117,6 +118,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .kids: return "kids"
         case .newDriver: return "the student driver bumper sticker"
         case .cardio: return "cardio"
+        case .realityTv: return "reality TV"
         case .switchGame: return "the Switch"
         case .maiTai: return "the mai tai"
         case .hibiscus: return "the hibiscus"
@@ -124,6 +126,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .cheeseburger: return "the cheeseburger"
         case .tankTop: return "the tank top"
         case .dragQueen: return "the drag queen"
+        case .southPark: return "South Park"
         }
     }
 }

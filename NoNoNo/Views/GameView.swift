@@ -19,6 +19,7 @@ struct GameView: View {
     @State private var comboCallout: (String, Color)? = nil
     @State private var extraLifeCallout = false
     @State private var pulseOpacity: CGFloat = 0.6
+    @State private var lastSmackPos: CGPoint = .zero
 
     private let tick = Timer.publish(every: 1.0 / 30.0, on: .main, in: .common).autoconnect()
 
@@ -63,22 +64,22 @@ struct GameView: View {
                         }
                         .transition(.opacity)
                     }
-                    // ── Combo milestone callout ──
+                    // ── Combo milestone callout (anchored at last smack) ──
                     if let (text, color) = comboCallout {
                         Text(text)
                             .font(.system(size: 56, weight: .black, design: .rounded))
                             .foregroundColor(color)
                             .shadow(color: .black.opacity(0.6), radius: 0, x: 3, y: 4)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .position(x: lastSmackPos.x, y: lastSmackPos.y)
                             .transition(.scale.combined(with: .opacity))
                     }
-                    // ── Extra life celebration ──
+                    // ── Extra life celebration (anchored at last smack) ──
                     if extraLifeCallout {
                         Text("+1 ❤️")
                             .font(.system(size: 44, weight: .black, design: .rounded))
                             .foregroundColor(.green)
                             .shadow(color: .black.opacity(0.5), radius: 0, x: 3, y: 4)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .position(x: lastSmackPos.x, y: lastSmackPos.y)
                             .transition(.scale.combined(with: .opacity))
                     }
                 }
@@ -129,16 +130,19 @@ struct GameView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     withAnimation { comboCallout = nil }
                 }
+                if voiceOn { VoiceBox.shared.sayJoshSmash() }
             } else if newCombo >= 15 && prev < 15 {
                 withAnimation { comboCallout = ("AMAZING!", .orange) }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
                     withAnimation { comboCallout = nil }
                 }
+                if voiceOn { VoiceBox.shared.sayJoshSmash() }
             } else if newCombo >= 10 && prev < 10 {
                 withAnimation { comboCallout = ("GREAT!", .yellow) }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     withAnimation { comboCallout = nil }
                 }
+                if voiceOn { VoiceBox.shared.sayJoshSmash() }
             } else if newCombo >= 5 && prev < 5 {
                 withAnimation { comboCallout = ("NICE!", .green) }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
@@ -266,6 +270,9 @@ struct GameView: View {
         let now = Date().timeIntervalSinceReferenceDate
         guard let result = engine.smack(target.id, at: now) else { return }
         onSmack?(target.kind, result)
+
+        // Remember the last smack location for anchoring combo callouts
+        lastSmackPos = CGPoint(x: target.x * size.width, y: target.y * size.height)
 
         // Impact: explosion + debris at the point of contact, board shake.
         // Mistakes shake harder — you FELT that one.

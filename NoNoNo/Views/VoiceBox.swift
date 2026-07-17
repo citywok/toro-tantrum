@@ -26,7 +26,12 @@ final class VoiceBox {
     }
 
     func sayGameOver() {
-        speak("josh smasht. god dammit.")
+        speak("josh smashshust. god dammit.", rate: 0.38)
+    }
+
+    /// Called when a good combo milestone is hit — the raging chant.
+    func sayJoshSmash() {
+        speak("josh smash!", rate: 0.48)
     }
 
     /// Spoken on the start screen: "je mapelle josh smash" (French-ified).
