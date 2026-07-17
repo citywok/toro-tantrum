@@ -25,6 +25,7 @@ enum TargetKind: String, CaseIterable, Equatable {
     case cheeseburger
     case tankTop
     case dragQueen
+    // Pizza and sunscreen have been promoted to aloha targets
     case pineapplePizza
     case sunscreen
 
