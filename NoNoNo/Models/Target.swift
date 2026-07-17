@@ -5,10 +5,8 @@ import Foundation
 enum TargetKind: String, CaseIterable, Equatable {
     // Rage targets — SMACK
     case redHair
-    case sunscreen
     case dnaTest
     case touristCam
-    case pineapplePizza
     case snowflake
     // From the group chat's verified list of things Josh hates
     case shannon
@@ -26,14 +24,18 @@ enum TargetKind: String, CaseIterable, Equatable {
     case rainbow
     case cheeseburger
     case tankTop
+    case dragQueen
+    case pineapplePizza
+    case sunscreen
 
     var isRage: Bool {
         switch self {
-        case .redHair, .sunscreen, .dnaTest, .touristCam, .pineapplePizza, .snowflake,
+        case .redHair, .dnaTest, .touristCam, .snowflake,
              .shannon, .badDrivers, .dodTravel, .hoa, .thatSong, .kids, .newDriver,
              .cardio:
             return true
-        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop:
+        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop,
+             .dragQueen, .pineapplePizza, .sunscreen:
             return false
         }
     }
@@ -63,6 +65,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .rainbow: return "🌈"
         case .cheeseburger: return "🍔"
         case .tankTop: return "🎽"
+        case .dragQueen: return "💅"
         }
     }
 
@@ -72,10 +75,11 @@ enum TargetKind: String, CaseIterable, Equatable {
         switch self {
         case .redHair, .shannon: return 25
         case .dnaTest, .thatSong: return 20
-        case .pineapplePizza, .badDrivers, .dodTravel, .hoa, .kids, .newDriver,
+        case .badDrivers, .dodTravel, .hoa, .kids, .newDriver,
              .cardio: return 15
-        case .sunscreen, .touristCam, .snowflake: return 10
-        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop: return 0
+        case .touristCam, .snowflake: return 10
+        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop,
+             .dragQueen, .pineapplePizza, .sunscreen: return 0
         }
     }
 
@@ -118,6 +122,7 @@ enum TargetKind: String, CaseIterable, Equatable {
         case .rainbow: return "the rainbow"
         case .cheeseburger: return "the cheeseburger"
         case .tankTop: return "the tank top"
+        case .dragQueen: return "the drag queen"
         }
     }
 }
