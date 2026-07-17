@@ -72,6 +72,130 @@ final class SoundKit {
         })
     }
 
+    // MARK: - Background Music
+
+    private var musicPlayer: AVAudioPlayerNode?
+    private(set) var musicPlaying = false
+
+    /// Start looping 8-bit chiptune background music.
+    func startMusic() {
+        guard !musicPlaying else { return }
+        let player = AVAudioPlayerNode()
+        engine.attach(player)
+        engine.connect(player, to: engine.mainMixerNode, format: format)
+        musicPlayer = player
+
+        let buffer = makeMusicBuffer(duration: 8.0)
+        player.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
+        player.play()
+        musicPlaying = true
+    }
+
+    /// Stop background music.
+    func stopMusic() {
+        guard let player = musicPlayer, musicPlaying else { return }
+        player.stop()
+        engine.detach(player)
+        musicPlayer = nil
+        musicPlaying = false
+    }
+
+    // MARK: - 8-bit Chiptune Generator
+
+    private func makeMusicBuffer(duration: Double) -> AVAudioPCMBuffer {
+        let frames = AVAudioFrameCount(duration * sampleRate)
+        let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames)!
+        buffer.frameLength = frames
+        let data = buffer.floatChannelData![0]
+
+        let bpm = 140.0
+        let beatsPerSecond = bpm / 60.0
+        // ── note helpers ──
+        func sq(_ t: Double, _ freq: Double) -> Double {
+            (t * freq).truncatingRemainder(dividingBy: 1.0) < 0.5 ? 1.0 : -1.0
+        }
+        func freq(_ midi: Int) -> Double { 440.0 * pow(2.0, (Double(midi) - 69.0) / 12.0) }
+
+        // ── note sequences ──
+        // Each note: (startBeat, durationBeats, midiNote)
+        // Melody — 8 bars of arpeggiated 8-bit flavour
+        let melody: [(Double, Double, Int)] = [
+            // Bar 0-1: C-E-G-C up, B-G-E-C down
+            (0, 0.25, 60), (0.25, 0.25, 64), (0.5, 0.25, 67), (0.75, 0.25, 72),
+            (1, 0.25, 71), (1.25, 0.25, 67), (1.5, 0.25, 64), (1.75, 0.25, 60),
+            // Bar 2-3: G-B-D-G up, E-D-B-G down
+            (2, 0.25, 67), (2.25, 0.25, 71), (2.5, 0.25, 74), (2.75, 0.25, 79),
+            (3, 0.25, 76), (3.25, 0.25, 74), (3.5, 0.25, 71), (3.75, 0.25, 67),
+            // Bar 4-5: A-C-E-A up, G-E-C-A down
+            (4, 0.25, 69), (4.25, 0.25, 72), (4.5, 0.25, 76), (4.75, 0.25, 81),
+            (5, 0.25, 79), (5.25, 0.25, 76), (5.5, 0.25, 72), (5.75, 0.25, 69),
+            // Bar 6-7: F-A-C-F up, E-C-A-F → to G-C-E-G for the turn
+            (6, 0.25, 65), (6.25, 0.25, 69), (6.5, 0.25, 72), (6.75, 0.25, 77),
+            (7, 0.25, 76), (7.25, 0.25, 72), (7.5, 0.25, 69), (7.75, 0.5, 67),
+        ]
+
+        // Bass — dark power chords on the downbeats
+        let bass: [(Double, Double, Int)] = [
+            (0, 2, 48), (2, 2, 55),
+            (4, 2, 45), (6, 2, 52),
+        ]
+
+        // Harmony — long chord stabs every 2 beats
+        let harmony: [(Double, Double, Int)] = [
+            (0, 2, 67), (2, 2, 71),
+            (4, 2, 64), (6, 2, 69),
+        ]
+
+        let totalBeats = 8.0
+
+        for i in 0..<Int(frames) {
+            let t = Double(i) / sampleRate
+            let beat = (t * beatsPerSecond).truncatingRemainder(dividingBy: totalBeats)
+
+            var sample: Double = 0
+
+            // ── melody voice ──
+            for note in melody {
+                let end = note.0 + note.1
+                if beat >= note.0 && beat < end {
+                    let local = (beat - note.0)
+                    let env = min(local * 40, 1.0) * min((end - beat) * 80, 1.0)
+                    sample += sq(t, freq(note.2)) * 0.10 * env
+                    break
+                }
+            }
+
+            // ── bass voice ──
+            for note in bass {
+                let end = note.0 + note.1
+                if beat >= note.0 && beat < end {
+                    let local = (beat - note.0)
+                    let env = min(local * 20, 1.0) * min((end - beat) * 40, 1.0)
+                    sample += sq(t, freq(note.2)) * 0.12 * env
+                    break
+                }
+            }
+
+            // ── harmony voice (pulse with a different duty for texture) ──
+            for note in harmony {
+                let end = note.0 + note.1
+                if beat >= note.0 && beat < end {
+                    let local = (beat - note.0)
+                    let env = min(local * 10, 1.0) * min((end - beat) * 20, 1.0)
+                    let phase = (t * freq(note.2)).truncatingRemainder(dividingBy: 1.0)
+                    let pulse: Double = phase < 0.25 ? 1.0 : -1.0  // 25% duty = thinner
+                    sample += pulse * 0.06 * env
+                    break
+                }
+            }
+
+            // Soft clip to [-0.7, 0.7] to avoid harsh digital clipping
+            data[i] = Float(max(-0.7, min(0.7, sample)))
+        }
+
+        return buffer
+    }
+
     /// The descending womp of failure.
     func gameOver() {
         play(makeBuffer(duration: 0.6) { t in

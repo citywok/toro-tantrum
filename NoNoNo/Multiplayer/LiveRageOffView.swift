@@ -1,11 +1,12 @@
 import SwiftUI
 
-/// RAGE-OFF LIVE: own phones, same room, same seeded round, all at once.
+/// MULTIPLAYER: own phones, nearby, same seeded round, all at once.
 struct LiveRageOffView: View {
     var gingerMode: Bool
     var hapticsOn: Bool
     var soundOn: Bool
     var voiceOn: Bool
+    var musicOn: Bool
     @ObservedObject var scores: ScoreStore
     var onExit: () -> Void
 
@@ -30,7 +31,9 @@ struct LiveRageOffView: View {
             switch stage {
             case .countdown:
                 recordedThisRound = false
+                SoundKit.shared.stopMusic()
             case .podium:
+                SoundKit.shared.stopMusic()
                 if !recordedThisRound {
                     recordedThisRound = true
                     scores.record(score: match.engine.score, smacks: match.engine.smacks)
@@ -39,8 +42,10 @@ struct LiveRageOffView: View {
                         VoiceBox.shared.speak("\(winner) wins. everyone else... god damn it.")
                     }
                 }
-            default:
-                break
+            case .lobby, .playing:
+                if musicOn && !SoundKit.shared.musicPlaying {
+                    SoundKit.shared.startMusic()
+                }
             }
         }
         .onAppear {
@@ -48,8 +53,15 @@ struct LiveRageOffView: View {
                let guess = PlayerNameGuess.fromDevice() {
                 playerName = guess.uppercased()
             }
+            // Start music on the lobby screen
+            if musicOn {
+                SoundKit.shared.startMusic()
+            }
         }
-        .onDisappear { match.leave() }
+        .onDisappear {
+            match.leave()
+            SoundKit.shared.stopMusic()
+        }
         .statusBarHidden(true)
     }
 
@@ -72,12 +84,12 @@ struct LiveRageOffView: View {
             }
             .padding(.horizontal, 8)
 
-            Text("RAGE-OFF LIVE")
+            Text("MULTIPLAYER")
                 .font(.system(size: 44, weight: .black, design: .rounded))
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.35), radius: 0, x: 3, y: 4)
 
-            Text("Own phones. Same WiFi. Same 60 seconds.\nWhen JOSH DEMANDS, the room enforces it.")
+            Text("Own phones. Same room. Same 60 seconds.\nWhen JOSH DEMANDS, the room enforces it.")
                 .font(.callout.weight(.medium))
                 .multilineTextAlignment(.center)
                 .foregroundColor(.white)
@@ -238,7 +250,7 @@ struct LiveRageOffView: View {
         VStack(spacing: 14) {
             Spacer()
 
-            Text("LIVE RESULTS")
+            Text("MULTIPLAYER RESULTS")
                 .font(.system(size: 36, weight: .black, design: .rounded))
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.35), radius: 0, x: 2, y: 3)

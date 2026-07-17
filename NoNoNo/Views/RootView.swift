@@ -7,8 +7,9 @@ struct RootView: View {
     @AppStorage("hapticsOn") private var hapticsOn = true
     @AppStorage("voiceOn") private var voiceOn = true
     @AppStorage("soundOn") private var soundOn = true
+    @AppStorage("musicOn") private var musicOn = true
     @State private var showSettings = false
-    @State private var showLiveRageOff = false
+    @State private var showMultiplayer = false
     @State private var lastGameWasHighScore = false
     @State private var saidIntro = false
 
@@ -24,7 +25,7 @@ struct RootView: View {
                         if voiceOn { VoiceBox.shared.sayIntro() }
                         engine.start(at: Date().timeIntervalSinceReferenceDate)
                     },
-                    onLiveRageOff: { showLiveRageOff = true },
+                    onLiveRageOff: { showMultiplayer = true },
                     onSettings: { showSettings = true }
                 )
             case .playing:
@@ -54,6 +55,8 @@ struct RootView: View {
                     }
                 }
             }
+            // Background music
+            handleBackgroundMusic(for: phase)
         }
         // Every mistake is announced out loud, immediately — including the
         // final one, which is why this lives here and not in GameView.
@@ -62,18 +65,50 @@ struct RootView: View {
         .onAppear {
             if voiceOn && !saidIntro {
                 saidIntro = true
-                VoiceBox.shared.sayIntro()
+                VoiceBox.shared.sayJeMapelle()
+            }
+            // Start music when the app appears on the start screen
+            if musicOn {
+                SoundKit.shared.startMusic()
             }
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(gingerMode: $gingerMode, hapticsOn: $hapticsOn,
-                         voiceOn: $voiceOn, soundOn: $soundOn)
+                         voiceOn: $voiceOn, soundOn: $soundOn, musicOn: $musicOn)
         }
-        .fullScreenCover(isPresented: $showLiveRageOff) {
+        .fullScreenCover(isPresented: $showMultiplayer) {
             LiveRageOffView(gingerMode: gingerMode, hapticsOn: hapticsOn,
-                            soundOn: soundOn, voiceOn: voiceOn, scores: scores,
-                            onExit: { showLiveRageOff = false })
+                            soundOn: soundOn, voiceOn: voiceOn, musicOn: musicOn,
+                            scores: scores,
+                            onExit: { showMultiplayer = false })
+        }
+        .onChange(of: showMultiplayer) { showing in
+            if showing {
+                // Stop background music when entering multiplayer
+                SoundKit.shared.stopMusic()
+            } else {
+                // Restart music when returning to main menu
+                handleBackgroundMusic(for: engine.phase)
+            }
+        }
+        .onChange(of: musicOn) { enabled in
+            if enabled {
+                handleBackgroundMusic(for: engine.phase)
+            } else {
+                SoundKit.shared.stopMusic()
+            }
         }
         .statusBarHidden(true)
+    }
+
+    private func handleBackgroundMusic(for phase: GamePhase) {
+        switch phase {
+        case .ready, .playing:
+            if musicOn {
+                SoundKit.shared.startMusic()
+            }
+        case .gameOver:
+            SoundKit.shared.stopMusic()
+        }
     }
 }

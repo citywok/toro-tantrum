@@ -5,6 +5,7 @@ struct SettingsView: View {
     @Binding var hapticsOn: Bool
     @Binding var voiceOn: Bool
     @Binding var soundOn: Bool
+    @Binding var musicOn: Bool
     @AppStorage("cartoonMode") private var cartoonMode = false
     @Environment(\.dismiss) private var dismiss
 
@@ -37,6 +38,15 @@ struct SettingsView: View {
                     .accessibilityIdentifier("voiceToggle")
                     Toggle("Game sounds", isOn: $soundOn)
                         .accessibilityIdentifier("soundToggle")
+                    Toggle(isOn: $musicOn) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("8-bit Music")
+                            Text("Old fashioned arcade chiptunes.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .accessibilityIdentifier("musicToggle")
                 }
 
                 Section("Face") {
