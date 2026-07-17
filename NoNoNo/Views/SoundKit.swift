@@ -13,6 +13,9 @@ enum GameAudioSession {
     }
 }
 
+/// Dynamic music intensity levels.
+enum MusicIntensity { case normal, intense, rage }
+
 /// Synthesized game sounds — no audio assets, just PCM math.
 final class SoundKit {
     static let shared = SoundKit()
@@ -76,16 +79,35 @@ final class SoundKit {
 
     private var musicPlayer: AVAudioPlayerNode?
     private(set) var musicPlaying = false
+    private var currentIntensity: MusicIntensity = .normal
+    private var normalBuffer: AVAudioPCMBuffer?
+    private var intenseBuffer: AVAudioPCMBuffer?
+    private var rageBuffer: AVAudioPCMBuffer?
 
     /// Start looping 8-bit chiptune background music.
+    /// Respects any intensity that was set before music started.
     func startMusic() {
         guard !musicPlaying else { return }
+        startIfNeeded()
         let player = AVAudioPlayerNode()
         engine.attach(player)
         engine.connect(player, to: engine.mainMixerNode, format: format)
         musicPlayer = player
 
-        let buffer = makeMusicBuffer(duration: 8.0)
+        let bpm: Double
+        switch currentIntensity {
+        case .normal:   bpm = 140
+        case .intense:  bpm = 165
+        case .rage:     bpm = 190
+        }
+        let buffer = makeMusicBuffer(bpm: bpm, duration: 8.0)
+        // Cache the generated buffer
+        switch currentIntensity {
+        case .normal:   normalBuffer = buffer
+        case .intense:  intenseBuffer = buffer
+        case .rage:     rageBuffer = buffer
+        }
+        player.volume = 0.4  // background music sits underneath sound effects
         player.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
         player.play()
         musicPlaying = true
@@ -100,15 +122,40 @@ final class SoundKit {
         musicPlaying = false
     }
 
+    /// Swap to a different music intensity. Generates buffers lazily.
+    func setMusicIntensity(_ intensity: MusicIntensity) {
+        guard intensity != currentIntensity, let player = musicPlayer, musicPlaying else {
+            currentIntensity = intensity
+            return
+        }
+        currentIntensity = intensity
+
+        let buffer: AVAudioPCMBuffer
+        switch intensity {
+        case .normal:
+            if let cached = normalBuffer { buffer = cached }
+            else { buffer = makeMusicBuffer(bpm: 140, duration: 8.0); normalBuffer = buffer }
+        case .intense:
+            if let cached = intenseBuffer { buffer = cached }
+            else { buffer = makeMusicBuffer(bpm: 165, duration: 8.0); intenseBuffer = buffer }
+        case .rage:
+            if let cached = rageBuffer { buffer = cached }
+            else { buffer = makeMusicBuffer(bpm: 190, duration: 8.0); rageBuffer = buffer }
+        }
+
+        player.stop()
+        player.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
+        player.play()
+    }
+
     // MARK: - 8-bit Chiptune Generator
 
-    private func makeMusicBuffer(duration: Double) -> AVAudioPCMBuffer {
+    private func makeMusicBuffer(bpm: Double, duration: Double) -> AVAudioPCMBuffer {
         let frames = AVAudioFrameCount(duration * sampleRate)
         let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames)!
         buffer.frameLength = frames
         let data = buffer.floatChannelData![0]
 
-        let bpm = 140.0
         let beatsPerSecond = bpm / 60.0
         // ── note helpers ──
         func sq(_ t: Double, _ freq: Double) -> Double {

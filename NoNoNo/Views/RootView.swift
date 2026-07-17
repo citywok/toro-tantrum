@@ -36,6 +36,8 @@ struct RootView: View {
                     score: engine.score,
                     bestCombo: engine.bestCombo,
                     smacks: engine.smacks,
+                    totalTaps: engine.totalTaps,
+                    rageModeCount: engine.rageModeCount,
                     highScore: scores.highScore,
                     isNewHighScore: lastGameWasHighScore,
                     gingerMode: gingerMode,

@@ -8,54 +8,45 @@ All items address specific arcade-feel gaps identified in the code review.
 
 ### ✅ Task 1: Screen shake on escapes & mistakes
 - **File:** `GameView.swift`
-- **What:** Add `shakePhase` increment in the `onChange(of: engine.lastLifeLoss)` handler so the board shakes when the player makes a mistake or lets a target escape.
+- **What:** Added `shakePhase += 3` in the `onChange(of: engine.lastLifeLoss)` handler so the board shakes when the player makes a mistake or lets a target escape.
 - **Arcade payoff:** Punishment has PHYSICAL feedback, not just visual.
-- **Difficulty:** Trivial
 
 ### ✅ Task 2: Combo milestone callouts ("NICE!" / "GREAT!" / etc.)
 - **File:** `GameView.swift`
-- **What:** Watch `engine.combo`. At thresholds 5, 10, 15, 20 → show big centered text. On combo break (drop from ≥5), show "COMBO BROKEN!" in red.
+- **What:** Watches `engine.combo`. At thresholds 5, 10, 15, 20 → shows big centered text. On combo break (drop from ≥5), shows "COMBO BROKEN!" in red.
 - **Arcade payoff:** Arcade games CELEBRATE your streaks and MOCK your failures.
-- **Difficulty:** Easy
 
 ### ✅ Task 3: Extra life at score milestones
 - **File:** `GameEngine.swift`
-- **What:** Every 1000 points → gain +1 life (capped at starting lives). Publish an event so the UI can celebrate.
+- **What:** Every 1000 points → gain +1 life (capped at starting lives). Publishes `extraLifeCount` so the UI celebrates.
 - **Arcade payoff:** The classic carrot-on-a-stick — keeps players pushing.
-- **Difficulty:** Easy
 
 ### ✅ Task 4: Rage meter near-full glow/pulse
 - **File:** `GameView.swift`
-- **What:** When `rage > 0.8` and not already in rage mode, make the meter bar pulse with a yellow glow.
+- **What:** When `rage > 0.8` and not already in rage mode, the meter bar pulses with a yellow stroke overlay.
 - **Arcade payoff:** Creates urgency and anticipation — "ALMOST THERE!"
-- **Difficulty:** Trivial
 
 ### ✅ Task 5: Arcade 3-2-1-GO! countdown
 - **File:** `GameEngine.swift` + `GameView.swift`
-- **What:** Engine delays first spawn by 3 seconds and publishes a countdown. GameView shows huge centered numbers, then "GO!".
-- **Arcade payoff:** Builds anticipation before the chaos. Every arcade game does this.
-- **Difficulty:** Easy
+- **What:** Engine publishes `countdownSeconds` (3, 2, 1, 0) on game start. First spawn is delayed by 3 seconds. GameView shows huge centered numbers, then "GO!".
+- **Arcade payoff:** Builds anticipation before the chaos.
 
 ### ✅ Task 6: Punchier score popups (fly-up animation)
 - **File:** `GameView.swift`
-- **What:** Replace static positioned score text with a `BurstView` that animates upward while fading out.
+- **What:** New `BurstView` struct replaces static positioned score text. Animate upward by 44 points while fading out over 0.5s.
 - **Arcade payoff:** Score numbers that *move* feel more impactful.
-- **Difficulty:** Easy
 
 ### ✅ Task 7: Dynamic music intensity
 - **File:** `SoundKit.swift`
-- **What:** Generate 3 BPM variants of the chiptune (normal 140, intense 160, rage 180). Swap buffers based on game state.
+- **What:** New `MusicIntensity` enum (normal 140 BPM, intense 165 BPM, rage 190 BPM). `setMusicIntensity()` swaps the looping buffer based on combo/rage state. Buffers cached lazily.
 - **Arcade payoff:** Music that speeds up with the action = primal excitement.
-- **Difficulty:** Medium
 
 ### ✅ Task 8: Game Over "CONTINUE?" countdown
 - **File:** `GameOverView.swift`
-- **What:** Show a 10-second continue countdown overlay. If player taps, restart; if it expires, show full stats.
+- **What:** 10-second continue countdown overlay appears on game over. Player can tap to restart or wait for it to expire → full stats screen.
 - **Arcade payoff:** The arcade "CONTINUE?" screen is iconic — builds tension and urgency.
-- **Difficulty:** Easy
 
 ### ✅ Task 9: Post-game stat breakdown
-- **File:** `GameOverView.swift`, `GameEngine.swift`
-- **What:** Track total taps and rage mode activations in engine. Show accuracy %, rage modes triggered, and stat breakdown on game over screen.
+- **File:** `GameEngine.swift`, `GameOverView.swift`, `RootView.swift`
+- **What:** Engine tracks `totalTaps` and `rageModeCount`. GameOverView shows accuracy %, rage modes triggered, and a 4-column stat row.
 - **Arcade payoff:** Stats screen = bragging rights and self-improvement.
-- **Difficulty:** Easy

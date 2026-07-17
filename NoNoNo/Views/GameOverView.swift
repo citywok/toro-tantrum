@@ -165,14 +165,24 @@ struct GameOverView: View {
 
 /// A horizontal row of stat items.
 struct StatsRow: View {
+    struct Item: Identifiable {
+        let id = UUID()
+        let value: String
+        let label: String
+    }
+
     let items: [(String, String)]
+
+    private var statItems: [Item] {
+        items.map { Item(value: $0.0, label: $0.1) }
+    }
 
     var body: some View {
         HStack(spacing: 22) {
-            ForEach(items, id: \.1) { value, label in
+            ForEach(statItems) { item in
                 VStack {
-                    Text(value).font(.title3.weight(.heavy))
-                    Text(label).font(.caption2.bold())
+                    Text(item.value).font(.title3.weight(.heavy))
+                    Text(item.label).font(.caption2.bold())
                 }
             }
         }

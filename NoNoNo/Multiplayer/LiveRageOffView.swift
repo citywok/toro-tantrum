@@ -89,7 +89,7 @@ struct LiveRageOffView: View {
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.35), radius: 0, x: 3, y: 4)
 
-            Text("Own phones. Same room. Same 60 seconds.\nWhen JOSH DEMANDS, the room enforces it.")
+            Text("BATTLE ROYALE · 2–8 PLAYERS\nHelp Josh purge the island of everything he hates.")
                 .font(.callout.weight(.medium))
                 .multilineTextAlignment(.center)
                 .foregroundColor(.white)
@@ -166,12 +166,12 @@ struct LiveRageOffView: View {
                         .padding(.vertical, 14)
                         .padding(.horizontal, 32)
                         .background(Capsule().fill(
-                            (2...4).contains(match.roster.count)
+                            (2...8).contains(match.roster.count)
                                 ? Color(red: 0.85, green: 0.15, blue: 0.10)
                                 : Color.gray.opacity(0.5)))
                         .overlay(Capsule().stroke(.white, lineWidth: 3))
                 }
-                .disabled(!(2...4).contains(match.roster.count))
+                .disabled(!(2...8).contains(match.roster.count))
                 .accessibilityIdentifier("startLiveButton")
             }
 
@@ -255,7 +255,7 @@ struct LiveRageOffView: View {
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.35), radius: 0, x: 2, y: 3)
 
-            let medals = ["🏆", "🥈", "🥉", "😤"]
+            let medals = ["🏆", "🥈", "🥉", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "💀"]
             VStack(spacing: 8) {
                 ForEach(Array(match.ranked.enumerated()), id: \.offset) { index, entry in
                     HStack {

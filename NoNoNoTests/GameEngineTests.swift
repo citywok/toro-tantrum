@@ -35,6 +35,10 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(engine.lives, Tuning().startLives)
         XCTAssertEqual(engine.level, 1)
         XCTAssertEqual(engine.rage, 0)
+        XCTAssertEqual(engine.countdownSeconds, 3)
+        XCTAssertEqual(engine.totalTaps, 0)
+        XCTAssertEqual(engine.extraLifeCount, 0)
+        XCTAssertEqual(engine.rageModeCount, 0)
         XCTAssertTrue(engine.targets.isEmpty)
     }
 
@@ -308,5 +312,147 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(a.targets.map(\.kind), b.targets.map(\.kind))
         XCTAssertEqual(a.targets.map(\.x), b.targets.map(\.x))
         XCTAssertEqual(a.lives, b.lives)
+    }
+
+    // MARK: - Arcade improvements
+
+    func testCountdownStartsAtThreeAndBlocksTargets() {
+        let engine = makeEngine()
+        engine.start(at: 0)
+        XCTAssertEqual(engine.countdownSeconds, 3, "countdown starts at 3")
+        XCTAssertTrue(engine.targets.isEmpty, "no targets before countdown")
+
+        // Advance partway through countdown — no targets yet.
+        engine.advance(to: 1.0)
+        XCTAssertEqual(engine.countdownSeconds, 2)
+        XCTAssertTrue(engine.targets.isEmpty, "no targets during countdown")
+
+        engine.advance(to: 2.0)
+        XCTAssertEqual(engine.countdownSeconds, 1)
+        XCTAssertTrue(engine.targets.isEmpty, "no targets during countdown")
+    }
+
+    func testTargetsSpawnAfterCountdown() {
+        let engine = makeEngine()
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+
+        // waitForTarget advances past the countdown and finds the first target.
+        let target = waitForTarget(engine, from: &time)
+        XCTAssertEqual(engine.countdownSeconds, 0, "countdown finished")
+        XCTAssertGreaterThan(time, 3.0, "target spawned after 3s countdown")
+        XCTAssertFalse(engine.targets.isEmpty)
+        // Also verify the target is a valid kind.
+        XCTAssertTrue(TargetKind.allCases.contains(target.kind))
+    }
+
+    func testTotalTapsIncrementsOnSmack() {
+        let engine = makeEngine(alohaChance: 0.5) { tuning in
+            tuning.ragePerSmack = 0
+            tuning.baseSpawnInterval = 0.1
+            tuning.minSpawnInterval = 0.1
+            tuning.baseLifetime = 120
+            tuning.minLifetime = 120
+        }
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+
+        // Smack a rage target.
+        let rageTarget = waitForTarget(engine, from: &time) { $0.kind.isRage }
+        _ = engine.smack(rageTarget.id, at: time)
+        XCTAssertEqual(engine.totalTaps, 1, "good smack counts as tap")
+
+        // Smack an aloha target (need one on the board).
+        let aloha = waitForTarget(engine, from: &time) { !$0.kind.isRage }
+        _ = engine.smack(aloha.id, at: time)
+        XCTAssertEqual(engine.totalTaps, 2, "bad smack also counts as tap")
+
+        // Invalid id — no increment.
+        _ = engine.smack(UUID(), at: time)
+        XCTAssertEqual(engine.totalTaps, 2, "invalid smack does not count")
+    }
+
+    func testExtraLifeCountsAtScoreMilestone() {
+        let engine = makeEngine { tuning in
+            tuning.ragePerSmack = 0
+            tuning.baseSpawnInterval = 0.1
+            tuning.minSpawnInterval = 0.1
+            tuning.baseLifetime = 600
+            tuning.minLifetime = 600
+        }
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+
+        // Smack rage targets until score crosses 1000.
+        while engine.score < 1000 && engine.phase == .playing {
+            let target = waitForTarget(engine, from: &time) { $0.kind.isRage }
+            _ = engine.smack(target.id, at: time)
+        }
+
+        XCTAssertTrue(engine.score >= 1000)
+        XCTAssertEqual(engine.extraLifeCount, 1, "extra life triggered at 1000 pts")
+        XCTAssertEqual(engine.lives, Tuning().startLives, "lives capped at startLives")
+    }
+
+    func testExtraLifeRestoresLostLife() {
+        let engine = makeEngine { tuning in
+            tuning.ragePerSmack = 0
+            tuning.baseSpawnInterval = 0.1
+            tuning.minSpawnInterval = 0.1
+            tuning.baseLifetime = 0.2
+            tuning.minLifetime = 0.2
+        }
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+
+        // Let the first target escape to lose a life.
+        let target = waitForTarget(engine, from: &time)
+        time = target.expiresAt + 0.01
+        engine.advance(to: time)
+        XCTAssertEqual(engine.lives, Tuning().startLives - 1, "lost a life to escape")
+
+        // Build score to 1000.
+        while engine.score < 1000 && engine.phase == .playing {
+            let t = waitForTarget(engine, from: &time) { $0.kind.isRage }
+            _ = engine.smack(t.id, at: time)
+        }
+
+        XCTAssertTrue(engine.score >= 1000)
+        XCTAssertEqual(engine.extraLifeCount, 1, "extra life triggered")
+        XCTAssertEqual(engine.lives, Tuning().startLives, "life restored to startLives")
+    }
+
+    func testRageModeCountIncrements() {
+        let engine = makeEngine { tuning in
+            tuning.ragePerSmack = 1.0  // trigger rage on first smack
+            tuning.baseSpawnInterval = 0.1
+            tuning.minSpawnInterval = 0.1
+            tuning.baseLifetime = 600
+            tuning.minLifetime = 600
+        }
+        engine.start(at: 0)
+        var time: TimeInterval = 0
+
+        // One smack should trigger rage mode.
+        let first = waitForTarget(engine, from: &time) { $0.kind.isRage }
+        let result = engine.smack(first.id, at: time)
+        XCTAssertTrue(result?.enteredRageMode ?? false)
+        XCTAssertEqual(engine.rageModeCount, 1)
+
+        // Smack another target during rage mode (ragePerSmack is 1.0 but already raging).
+        let second = waitForTarget(engine, from: &time) { $0.kind.isRage }
+        _ = engine.smack(second.id, at: time)
+        XCTAssertEqual(engine.rageModeCount, 1, "rage mode count does not double-count")
+
+        // Let rage expire and trigger it again.
+        time += Tuning().rageDuration + 60
+        engine.advance(to: time)
+        XCTAssertFalse(engine.isRageMode)
+
+        // Wait for a fresh target and smack to re-enter rage.
+        let third = waitForTarget(engine, from: &time) { $0.kind.isRage }
+        _ = engine.smack(third.id, at: time)
+        XCTAssertTrue(engine.isRageMode)
+        XCTAssertEqual(engine.rageModeCount, 2, "rage mode count incremented again")
     }
 }

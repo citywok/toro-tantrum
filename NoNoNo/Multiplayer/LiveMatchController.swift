@@ -84,7 +84,7 @@ final class LiveMatchController: ObservableObject {
     }
 
     func startMatch() {
-        guard isHost, (2...4).contains(roster.count) else { return }
+        guard isHost, (2...8).contains(roster.count) else { return }
         let seed = UInt64.random(in: .min ... .max)
         broadcast(.start(seed: seed, delay: 3))
         applyStart(seed: seed, delay: 3)
