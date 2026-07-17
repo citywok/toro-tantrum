@@ -5,7 +5,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDisplayName</key>
-	<string>NO NO NO!</string>
+	<string>Josh Smash!</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleVersion</key>
