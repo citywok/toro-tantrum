@@ -125,7 +125,7 @@ struct GameView: View {
             }
             .frame(height: 13)
             .overlay(
-                Text(engine.isRageMode ? "🍹 JOSH SMASHED 🍹" : "SMASH-O-METER")
+                Text(engine.isRageMode ? "🍹 josh smash 🍹" : "SMASH-O-METER")
                     .font(.system(size: 9, weight: .black))
                     .foregroundColor(.white.opacity(0.95))
             )
@@ -187,7 +187,7 @@ struct GameView: View {
                 result.enteredRageMode ? VoiceBox.shared.sayRage() : VoiceBox.shared.sayNo()
             }
             if result.enteredRageMode {
-                quote = QuoteBank.rageModeStart.randomElement() ?? "JOSH SMASHED!!"
+                quote = QuoteBank.rageModeStart.randomElement() ?? "josh smash"
             } else {
                 quote = QuoteBank.smackQuote(for: target.kind)
             }

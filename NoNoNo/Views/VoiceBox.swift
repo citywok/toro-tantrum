@@ -22,7 +22,7 @@ final class VoiceBox {
     }
 
     func sayRage() {
-        speak("Josh! Smashed!")
+        speak("Josh! Smash!")
     }
 
     func sayGameOver() {
@@ -32,7 +32,7 @@ final class VoiceBox {
     /// The formal introduction. French, delivered in confident, terrible
     /// American — spelled phonetically so the en-US voice butchers it right.
     func sayIntro() {
-        speak("juh muh pell... Josh Smash!", rate: 0.48)
+        speak("juh muh pell... josh smash!", rate: 0.48)
     }
 
     func speak(_ text: String, rate: Float = 0.58, language: String = "en-US") {

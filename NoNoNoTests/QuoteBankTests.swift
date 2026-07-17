@@ -32,7 +32,7 @@ final class QuoteBankTests: XCTestCase {
     }
 
     func testIntroIsFrench() {
-        XCTAssertEqual(QuoteBank.intro, "JE M'APPELLE JOSH SMASH.")
+        XCTAssertEqual(QuoteBank.intro, "josh smash")
     }
 
     func testMistakeLineIsTheCatchphraseWithCorrectCadence() {

@@ -39,18 +39,11 @@ BUILD_NUMBER="${BUILD_NUMBER:-$(git rev-list --count HEAD 2>/dev/null || echo 1)
 # account on the builder) and TestFlight uploads. Key/issuer ids are not
 # secrets; the .p8 private key lives only on the Mac at
 # ~/.appstoreconnect/private_keys/AuthKey_<ASC_KEY_ID>.p8.
-ASC_KEY_ID="${ASC_KEY_ID:-MA894X726H}"
-ASC_ISSUER_ID="${ASC_ISSUER_ID:-69a6de98-0f77-47e3-e053-5b8c7c11a4d1}"
-ASC_AUTH_KEY_PATH="${ASC_AUTH_KEY_PATH:-$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8}"
-
-asc_auth_flags=()
-if [[ -f "$ASC_AUTH_KEY_PATH" ]]; then
-    asc_auth_flags=(
-        -authenticationKeyPath "$ASC_AUTH_KEY_PATH"
-        -authenticationKeyID "$ASC_KEY_ID"
-        -authenticationKeyIssuerID "$ASC_ISSUER_ID"
-    )
-fi
+asc_auth_flags=(
+    -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_MA894X726H.p8"
+    -authenticationKeyID "MA894X726H"
+    -authenticationKeyIssuerID "69a6de98-0f77-47e3-e053-5b8c7c11a4d1"
+)
 
 BUCKET="${BUILD_BUCKET:-cct-golf-builds}"
 REGION="${AWS_REGION:-us-east-1}"

@@ -80,7 +80,7 @@ enum QuoteBank {
     ]
 
     /// How he introduces himself. Formally. In French.
-    static let intro = "JE M'APPELLE JOSH SMASH."
+    static let intro = "josh smash"
 
     /// The catchphrase, with the correct cadence. Escapes get this, immediately.
     static let mistake = "NO, NO NO NO NO!"
@@ -89,7 +89,7 @@ enum QuoteBank {
     static let badTapMistake = "GODDAMNIT!! 😁"
 
     static let rageModeStart = [
-        "JOSH SMASHED!!",
+        "josh smash",
         "FULL RALPH MODE!!",
         "I'M GONNA WRECK IT!!",
         "MAXIMUM GODDAMNIT!!",
@@ -102,7 +102,7 @@ enum QuoteBank {
         "Breathe in. Aloha. Breathe out. ...GODDAMNIT.",
         "Hawaii called. It would like quieter residents.",
         "Your scalp is sunburned and so is your pride.",
-        "Josh smashed. Josh very smashed. Josh horizontal.",
+        "josh smashed!",
         "Oh my god, you killed the combo. You bastard!",
         "Screw you guys. He's going home.",
     ]
