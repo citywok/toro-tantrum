@@ -26,13 +26,17 @@ final class VoiceBox {
     }
 
     func sayGameOver() {
-        speak("josh smashed, god dammit")
+        speak("josh smashed. god dammit.")
     }
 
-    /// The formal introduction, delivered in confident, terrible
-    /// American — spelled phonetically so the en-US voice butchers it right.
+    /// Spoken on the start screen: "je mapelle josh smash" (French-ified).
+    func sayJeMapelle() {
+        speak("je mapelle josh smash", rate: 0.48)
+    }
+
+    /// Spoken when the game begins: "josh smash!"
     func sayIntro() {
-        speak("josh smash", rate: 0.48)
+        speak("josh smash!", rate: 0.48)
     }
 
     func speak(_ text: String, rate: Float = 0.58, language: String = "en-US") {
