@@ -48,7 +48,8 @@ final class GameEngineTests: XCTestCase {
         var time: TimeInterval = 0
         _ = waitForTarget(engine, from: &time)
         XCTAssertFalse(engine.targets.isEmpty)
-        XCTAssertLessThan(time, 2.0)
+        XCTAssertGreaterThan(time, 3.0, "target spawns after 3s countdown")
+        XCTAssertLessThan(time, 4.0)
     }
 
     func testSmackRageTargetScoresAndBuildsRage() {
@@ -255,7 +256,7 @@ final class GameEngineTests: XCTestCase {
         let b = makeEngine(alohaChance: 0.4, seed: 2)
         a.start(at: 0, seed: 99)
         b.start(at: 0, seed: 99)
-        for step in 1...60 {
+        for step in 1...100 {
             let t = Double(step) * 0.05
             a.advance(to: t)
             b.advance(to: t)
