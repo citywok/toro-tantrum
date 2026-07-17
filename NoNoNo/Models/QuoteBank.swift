@@ -84,7 +84,7 @@ enum QuoteBank {
         ],
     ]
 
-    /// How he introduces himself. Formally. In French.
+    /// How he introduces himself — now in plain English.
     static let intro = "josh smash"
 
     /// The catchphrase, with the correct cadence. Escapes get this, immediately.

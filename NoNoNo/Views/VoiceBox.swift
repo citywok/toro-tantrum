@@ -29,7 +29,7 @@ final class VoiceBox {
         speak("game over. god damn it.")
     }
 
-    /// The formal introduction. French, delivered in confident, terrible
+    /// The formal introduction, delivered in confident, terrible
     /// American — spelled phonetically so the en-US voice butchers it right.
     func sayIntro() {
         speak("juh muh pell... josh smash!", rate: 0.48)

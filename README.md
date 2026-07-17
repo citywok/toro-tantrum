@@ -7,9 +7,12 @@ smiling, so we shipped it.
 ## The game
 
 Targets pop up on a Hawaiian sunset board. **Smack the things he hates**
-(red hair 🦰, sunscreen 🧴, DNA tests 🧬, tourist cameras 📸, pineapple
-pizza 🍕, snowflakes ❄️). **Do NOT touch the things he loves** (the Switch 🎮,
-the mai tai 🍹, the hibiscus 🌺, the rainbow 🌈) — that costs a life and
+(red hair 🦰, DNA tests 🧬, tourist cameras 📸, snowflakes ❄️,
+Shannon 📛, bad drivers 🚗, DoD Travel ✈️, the HOA 🏘️,
+"Working Bitch" 🎵, kids 👶, student drivers 🔰, cardio 🏃).
+**Do NOT touch the things he loves** (the Switch 🎮, the mai tai 🍹,
+the hibiscus 🌺, the rainbow 🌈, the cheeseburger 🍔, the tank top 🎽,
+pineapple pizza 🍕, sunscreen 🧴, the drag queen 💅) — that costs a life and
 50 points.
 
 - Combo chain: consecutive smacks build a multiplier (up to 4x).
