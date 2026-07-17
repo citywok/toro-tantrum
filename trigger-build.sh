@@ -111,10 +111,6 @@ message = {
         "commit": commit,
         "source_branch": branch,
         "timeout": 1800,
-        "env": {
-            "ASC_KEY_ID": "MA894X726H",
-            "ASC_ISSUER_ID": "69a6de98-0f77-47e3-e053-5b8c7c11a4d1",
-        },
     },
     "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
 }

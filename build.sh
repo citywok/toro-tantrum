@@ -44,6 +44,9 @@ asc_auth_flags=(
     -authenticationKeyID "MA894X726H"
     -authenticationKeyIssuerID "69a6de98-0f77-47e3-e053-5b8c7c11a4d1"
 )
+: "${ASC_KEY_ID:=MA894X726H}"
+: "${ASC_ISSUER_ID:=69a6de98-0f77-47e3-e053-5b8c7c11a4d1}"
+: "${ASC_AUTH_KEY_PATH:=$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8}"
 
 BUCKET="${BUILD_BUCKET:-cct-golf-builds}"
 REGION="${AWS_REGION:-us-east-1}"
