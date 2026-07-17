@@ -60,7 +60,7 @@ struct StartView: View {
             .accessibilityIdentifier("startButton")
 
             Button(action: onLiveRageOff) {
-                Text("🗣 RAGE-OFF LIVE · OWN PHONES")
+                Text("🗣 MULTIPLAYER · NEARBY")
                     .font(.system(size: 16, weight: .black, design: .rounded))
                     .foregroundColor(.white)
                     .padding(.vertical, 12)
@@ -68,7 +68,7 @@ struct StartView: View {
                     .background(Capsule().fill(Color(red: 0.10, green: 0.35, blue: 0.55)))
                     .overlay(Capsule().stroke(.white, lineWidth: 2.5))
             }
-            .accessibilityIdentifier("liveRageOffButton")
+            .accessibilityIdentifier("multiplayerButton")
 
             if highScore > 0 {
                 Text("HIGH SCORE: \(highScore)")

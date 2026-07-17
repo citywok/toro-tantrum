@@ -1,7 +1,7 @@
 import Foundation
 import MultipeerConnectivity
 
-/// Thin transport for RAGE-OFF LIVE. Host advertises, joiners browse and
+/// Thin transport for MULTIPLAYER. Host advertises, joiners browse and
 /// invite themselves; topology is hub-and-spoke with the host relaying.
 final class MultipeerSession: NSObject, ObservableObject {
     static let serviceType = "nonono-rage"

@@ -20,7 +20,7 @@ struct Tuning {
     var rageDuration: TimeInterval = 6
     var smacksPerLevel = 10
     var maxTargetsOnScreen = 4
-    /// When set, the run ends after this many seconds (Rage-Off rounds).
+    /// When set, the run ends after this many seconds (multiplayer rounds).
     /// nil = classic endless mode, lives only.
     var roundDuration: TimeInterval?
 }
@@ -107,7 +107,7 @@ final class GameEngine: ObservableObject {
     }
 
     /// Starts a run. Passing a seed resets the RNG so two runs with the same
-    /// seed replay the identical target sequence — the Rage-Off fairness rule.
+    /// seed replay the identical target sequence — the multiplayer fairness rule.
     func start(at now: TimeInterval, seed: UInt64? = nil) {
         if let seed {
             rng = SplitMix64(seed: seed)

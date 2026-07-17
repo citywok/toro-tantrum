@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Haptic + sound + voice for every life loss on an engine. Attached above
 /// GameView so the final mistake still yells after the board disappears.
-/// Shared between the solo flow and the Rage-Off flow.
+/// Shared between the solo flow and the multiplayer flow.
 struct MistakeFeedback: ViewModifier {
     @ObservedObject var engine: GameEngine
     var hapticsOn: Bool

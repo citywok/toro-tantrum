@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-/// State machine for RAGE-OFF LIVE: everyone plays the same seeded 60-second
+/// State machine for MULTIPLAYER: everyone plays the same seeded 60-second
 /// round on their own phone. Spaceteam-style JOSH DEMANDS call out one player
 /// by name on every screen, so the room does the enforcement.
 final class LiveMatchController: ObservableObject {

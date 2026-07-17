@@ -1,6 +1,6 @@
 import Foundation
 
-/// Wire protocol for RAGE-OFF LIVE. JSON over MultipeerConnectivity.
+/// Wire protocol for MULTIPLAYER. JSON over MultipeerConnectivity.
 /// Non-host messages travel to the host, which relays them to everyone else.
 enum LiveMessage: Codable, Equatable {
     /// Joiner → host on connect.

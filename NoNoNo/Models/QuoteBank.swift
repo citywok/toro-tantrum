@@ -112,7 +112,7 @@ enum QuoteBank {
         "Screw you guys. He's going home.",
     ]
 
-    /// Rage-Off handoff trash talk. %@ is the previous player's name.
+    /// Multiplayer handoff trash talk. %@ is the previous player's name.
     static let trashTalkTemplates = [
         "%@ CALLS THAT A SCORE? GODDAMNIT.",
         "JOSH IS NOT IMPRESSED WITH %@.",

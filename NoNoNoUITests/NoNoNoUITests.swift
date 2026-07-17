@@ -28,12 +28,12 @@ final class NoNoNoUITests: XCTestCase {
                       "speech bubble missing")
     }
 
-    func testLiveRageOffLobbyOpens() throws {
+    func testMultiplayerLobbyOpens() throws {
         let app = XCUIApplication()
         app.launch()
 
-        let live = element(app, "liveRageOffButton")
-        XCTAssertTrue(live.waitForExistence(timeout: 10), "live rage-off button missing")
+        let live = element(app, "multiplayerButton")
+        XCTAssertTrue(live.waitForExistence(timeout: 10), "multiplayer button missing")
         live.tap()
 
         XCTAssertTrue(element(app, "hostButton").waitForExistence(timeout: 5),
@@ -45,7 +45,7 @@ final class NoNoNoUITests: XCTestCase {
         XCTAssertTrue(exit.waitForExistence(timeout: 5))
         exit.tap()
         XCTAssertTrue(element(app, "startButton").waitForExistence(timeout: 5),
-                      "did not return to menu from live lobby")
+                      "did not return to menu from multiplayer lobby")
     }
 
     func testSettingsOpensAndCloses() throws {
