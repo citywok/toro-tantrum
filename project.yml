@@ -19,7 +19,7 @@ targets:
       - path: NoNoNo
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.nonono
+        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.torotantrum
         INFOPLIST_FILE: NoNoNo/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
@@ -34,7 +34,7 @@ targets:
       - target: NoNoNo
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.nonono.tests
+        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.torotantrum.tests
         GENERATE_INFOPLIST_FILE: "YES"
   NoNoNoUITests:
     type: bundle.ui-testing
@@ -45,7 +45,7 @@ targets:
       - target: NoNoNo
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.nonono.uitests
+        PRODUCT_BUNDLE_IDENTIFIER: me.citywok.torotantrum.uitests
         GENERATE_INFOPLIST_FILE: "YES"
         TEST_TARGET_NAME: NoNoNo
 schemes:

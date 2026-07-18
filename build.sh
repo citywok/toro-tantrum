@@ -22,7 +22,7 @@ cd "$SCRIPT_DIR"
 
 BUILD_DIR="$SCRIPT_DIR/build"
 SCHEME="NoNoNo"
-BUNDLE_ID="me.citywok.nonono"
+BUNDLE_ID="me.citywok.torotantrum"
 ARCHIVE_PATH="$BUILD_DIR/$SCHEME.xcarchive"
 EXPORT_DIR="$BUILD_DIR/export"
 EXPORT_OPTIONS_PLIST="$SCRIPT_DIR/ExportOptions.plist"
@@ -242,13 +242,13 @@ manifest = f"""<?xml version="1.0" encoding="UTF-8"?>
       <key>metadata</key>
       <dict>
         <key>bundle-identifier</key>
-        <string>me.citywok.nonono</string>
+        <string>me.citywok.torotantrum</string>
         <key>bundle-version</key>
         <string>{escape(version)}</string>
         <key>kind</key>
         <string>software</string>
         <key>title</key>
-        <string>NO NO NO!</string>
+        <string>TORO TANTRUM!</string>
       </dict>
     </dict>
   </array>
@@ -279,15 +279,15 @@ page = f"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Install NoNoNo</title>
+<title>Install TORO TANTRUM!</title>
 <style>
-  body {{ font-family: -apple-system, sans-serif; background: #A81616; margin: 0;
+  body {{ font-family: -apple-system, sans-serif; background: #2D7D2D; margin: 0;
          display: flex; min-height: 100vh; align-items: center; justify-content: center; }}
   .card {{ background: white; border-radius: 24px; padding: 40px 32px; text-align: center;
           box-shadow: 0 10px 30px rgba(0,0,0,.08); max-width: 340px; margin: 20px; }}
-  h1 {{ color: #A81616; font-size: 30px; margin: 8px 0; font-weight: 900; }}
+  h1 {{ color: #2D7D2D; font-size: 30px; margin: 8px 0; font-weight: 900; }}
   p {{ color: #9a8580; font-size: 14px; line-height: 1.5; }}
-  .btn {{ display: block; background: #D9260F; color: white; text-decoration: none;
+  .btn {{ display: block; background: #E67E22; color: white; text-decoration: none;
          font-size: 19px; font-weight: 600; padding: 16px 24px; border-radius: 999px;
          margin: 24px 0 12px; }}
   .meta {{ font-size: 12px; color: #b5a6a1; }}
@@ -295,9 +295,9 @@ page = f"""<!DOCTYPE html>
 </head>
 <body>
 <div class="card">
-  <div style="font-size:56px">😤</div>
-  <h1>NO NO NO!</h1>
-  <p>The rage game. Smack everything he hates. Do NOT touch the mai tai. He is not a redhead. (He is.)</p>
+  <div style="font-size:56px">🍣</div>
+  <h1>TORO TANTRUM!</h1>
+  <p>Smack everything he hates (onions, cucumbers, tomatoes, wasabi).<br>Do NOT touch the hot dog, dino nugs, or the lap toro.</p>
   <a class="btn" href="{html.escape(install_url, quote=True)}">Install on iPhone</a>
   <p class="meta">v{html.escape(version)} (build {html.escape(build_number)}) · {html.escape(commit)}<br>{stamp}<br>
   Open this page in Safari on your iPhone, tap Install, then confirm the iOS prompt.
