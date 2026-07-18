@@ -15,8 +15,8 @@ struct SettingsView: View {
                 Section("The Truth") {
                     Toggle(isOn: $gingerMode) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Ginger Mode")
-                            Text("Displays his hair color accurately.")
+                            Text("Wasabi Mode")
+                            Text("Displays his hatred of wasabi accurately.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -53,7 +53,7 @@ struct SettingsView: View {
                     Toggle(isOn: $cartoonMode) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Cartoon Mode")
-                            Text("Construction-paper Josh instead of the real one.")
+                            Text("Cartoon face instead of the real one.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -62,11 +62,11 @@ struct SettingsView: View {
                 }
 
                 Section("About") {
-                    Text("Dedicated to the angriest, baldest, definitely-not-red-headed man in Hawaii.")
-                    Text("He said “no no no,” but he was smiling, so we shipped it.")
+                    Text("Dedicated to the man who once hid toro in his lap at dinner and we still talk about it years later.")
+                    Text("He loves hot dogs and dino nuggets. He hates onions, cucumbers, tomatoes, and wasabi.")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text("And then he said goddamnit.")
+                    Text("He said nooooooo, but he was smiling, so we shipped it.")
                         .font(.caption.italic())
                         .foregroundColor(.secondary)
                 }

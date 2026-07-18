@@ -13,35 +13,35 @@ final class VoiceBox {
 
     /// Touching something he loves.
     func sayGoddamnit() {
-        speak("god damn it!")
+        speak("nooo!")
     }
 
     /// Letting one get away. Note the cadence: one no, a beat, then the flood.
     func sayNoNoNoNoNo() {
-        speak("no, no no no no!")
+        speak("noo, no no no no!")
     }
 
     func sayRage() {
-        speak("Josh! Smash!")
+        speak("toro! tantrum!")
     }
 
     func sayGameOver() {
-        speak("josh smashshust. god dammit.", rate: 0.38)
+        speak("toro tantrum. nooo.", rate: 0.38)
     }
 
     /// Called when a good combo milestone is hit — the raging chant.
-    func sayJoshSmash() {
-        speak("josh smash!", rate: 0.48)
+    func sayToro() {
+        speak("toro tantrum!", rate: 0.48)
     }
 
-    /// Spoken on the start screen: "je mapelle josh smash" (French-ified).
+    /// Spoken on the start screen.
     func sayJeMapelle() {
-        speak("je mapelle josh smash", rate: 0.48)
+        speak("i love toro", rate: 0.48)
     }
 
-    /// Spoken when the game begins: "josh smash!"
+    /// Spoken when the game begins.
     func sayIntro() {
-        speak("josh smash!", rate: 0.48)
+        speak("toro tantrum!", rate: 0.48)
     }
 
     func speak(_ text: String, rate: Float = 0.58, language: String = "en-US") {

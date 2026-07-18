@@ -209,7 +209,7 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(engine.lastLifeLoss?.seq, 2)
     }
 
-    func testGreenTargetsStillCostALifeWhileJoshSmashed() {
+    func testGreenTargetsStillCostALifeWhileRaging() {
         let engine = makeEngine(alohaChance: 0.5, seed: 7) { tuning in
             tuning.ragePerSmack = 1.0
             tuning.rageDuration = 600
@@ -217,7 +217,7 @@ final class GameEngineTests: XCTestCase {
         engine.start(at: 0)
         var time: TimeInterval = 0
 
-        // Enter JOSH SMASHED via a rage-target smack.
+        // Enter rage mode via a rage-target smack.
         let rageTarget = waitForTarget(engine, from: &time) { $0.kind.isRage }
         _ = engine.smack(rageTarget.id, at: time)
         XCTAssertTrue(engine.isRageMode)

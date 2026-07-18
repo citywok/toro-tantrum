@@ -31,16 +31,16 @@ final class QuoteBankTests: XCTestCase {
         }
     }
 
-    func testIntroIsFrench() {
-        XCTAssertEqual(QuoteBank.intro, "josh smash")
+    func testIntroIsToro() {
+        XCTAssertEqual(QuoteBank.intro, "toro tantrum")
     }
 
     func testMistakeLineIsTheCatchphraseWithCorrectCadence() {
-        XCTAssertEqual(QuoteBank.mistake, "NO, NO NO NO NO!")
+        XCTAssertEqual(QuoteBank.mistake, "nooo, no no no no!")
     }
 
-    func testBadTapLineIsGoddamnit() {
-        XCTAssertTrue(QuoteBank.badTapMistake.contains("GODDAMNIT"))
+    func testBadTapLineIsNoooo() {
+        XCTAssertTrue(QuoteBank.badTapMistake.contains("NOOOO"))
     }
 
     func testStaticPoolsAreNonEmpty() {

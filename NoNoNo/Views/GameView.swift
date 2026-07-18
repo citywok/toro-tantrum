@@ -130,19 +130,19 @@ struct GameView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     withAnimation { comboCallout = nil }
                 }
-                if voiceOn { VoiceBox.shared.sayJoshSmash() }
+                if voiceOn { VoiceBox.shared.sayToro() }
             } else if newCombo >= 15 && prev < 15 {
                 withAnimation { comboCallout = ("AMAZING!", .orange) }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
                     withAnimation { comboCallout = nil }
                 }
-                if voiceOn { VoiceBox.shared.sayJoshSmash() }
+                if voiceOn { VoiceBox.shared.sayToro() }
             } else if newCombo >= 10 && prev < 10 {
                 withAnimation { comboCallout = ("GREAT!", .yellow) }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                     withAnimation { comboCallout = nil }
                 }
-                if voiceOn { VoiceBox.shared.sayJoshSmash() }
+                if voiceOn { VoiceBox.shared.sayToro() }
             } else if newCombo >= 5 && prev < 5 {
                 withAnimation { comboCallout = ("NICE!", .green) }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
@@ -203,7 +203,7 @@ struct GameView: View {
                 Spacer()
                 HStack(spacing: 2) {
                     ForEach(0..<engine.tuning.startLives, id: \.self) { i in
-                        Text("🌺")
+                        Text("🥚")
                             .font(.title3)
                             .opacity(i < engine.lives ? 1 : 0.18)
                     }
@@ -222,7 +222,7 @@ struct GameView: View {
             }
             .frame(height: 13)
             .overlay(
-                Text(engine.isRageMode ? "🍹 josh smash 🍹" : "SMASH-O-METER")
+                Text(engine.isRageMode ? "🍣 LAP TORO TIME 🍣" : "NUG-O-METER")
                     .font(.system(size: 9, weight: .black))
                     .foregroundColor(.white.opacity(0.95))
             )
@@ -302,7 +302,7 @@ struct GameView: View {
                 result.enteredRageMode ? VoiceBox.shared.sayRage() : VoiceBox.shared.sayNo()
             }
             if result.enteredRageMode {
-                quote = QuoteBank.rageModeStart.randomElement() ?? "josh smash"
+                quote = QuoteBank.rageModeStart.randomElement() ?? "toro tantrum"
             } else {
                 quote = QuoteBank.smackQuote(for: target.kind)
             }
@@ -429,83 +429,18 @@ struct TargetView: View {
 
     @ViewBuilder
     private var targetFace: some View {
-        switch kind {
-        case .redHair:
-            // A picture of a real redhead. The realest one available.
-            VStack(spacing: 0) {
-                Image("face_squint")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 48, height: 48)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(.black, lineWidth: 2))
-                Text("A REDHEAD")
-                    .font(.system(size: 9, weight: .black, design: .rounded))
-                    .foregroundColor(.black)
-            }
-        case .newDriver:
-            StudentDriverSticker()
-        case .kids:
-            VStack(spacing: -2) {
-                SwaddledBaby()
-                Text("KIDS")
+        if let caption = kind.caption {
+            VStack(spacing: -1) {
+                Text(kind.emoji).font(.system(size: 31))
+                Text(caption)
                     .font(.system(size: 10, weight: .black, design: .rounded))
                     .foregroundColor(.black)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
-        default:
-            if let caption = kind.caption {
-                VStack(spacing: -1) {
-                    Text(kind.emoji).font(.system(size: 31))
-                    Text(caption)
-                        .font(.system(size: 10, weight: .black, design: .rounded))
-                        .foregroundColor(.black)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                }
-                .padding(.horizontal, 3)
-            } else {
-                Text(kind.emoji).font(.system(size: 44))
-            }
-        }
-    }
-}
-
-/// The yellow menace itself.
-struct StudentDriverSticker: View {
-    var body: some View {
-        VStack(spacing: -1) {
-            Text("STUDENT")
-            Text("DRIVER")
-        }
-        .font(.system(size: 11, weight: .black, design: .rounded))
-        .foregroundColor(.black)
-        .padding(.vertical, 5)
-        .padding(.horizontal, 7)
-        .background(RoundedRectangle(cornerRadius: 5).fill(Color(red: 1.0, green: 0.84, blue: 0.10)))
-        .overlay(RoundedRectangle(cornerRadius: 5).stroke(.black, lineWidth: 2))
-        .rotationEffect(.degrees(-6))
-    }
-}
-
-/// A baby, swaddled. Menace level: brunch.
-struct SwaddledBaby: View {
-    var body: some View {
-        VStack(spacing: -8) {
-            Text("👶").font(.system(size: 24))
-            RoundedRectangle(cornerRadius: 11)
-                .fill(Color(red: 0.66, green: 0.85, blue: 0.95))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 11).stroke(.black, lineWidth: 1.5)
-                )
-                .overlay(
-                    // Blanket wrap line
-                    Path { path in
-                        path.move(to: CGPoint(x: 4, y: 8))
-                        path.addLine(to: CGPoint(x: 30, y: 20))
-                    }
-                    .stroke(.black.opacity(0.35), lineWidth: 1.5)
-                )
-                .frame(width: 34, height: 26)
+            .padding(.horizontal, 3)
+        } else {
+            Text(kind.emoji).font(.system(size: 44))
         }
     }
 }

@@ -3,128 +3,78 @@ import Foundation
 /// Everything he yells. Lovingly transcribed from the group chat.
 enum QuoteBank {
     static let genericSmack = [
-        "NO NO NO!",
-        "GODDAMNIT! 😁",
-        "ABSOLUTELY NOT!",
-        "NOPE. NOPE. NOPE.",
-        "GRAAAAH!",
-        "NOT TODAY!",
+        "nooooooooo",
+        "nooooooo!",
+        "absolutely not",
+        "not today!",
+        "nope. nope. nope.",
+        "graaah!",
     ]
 
     static let kindQuotes: [TargetKind: [String]] = [
-        .redHair: [
-            "I'M NOT A REDHEAD!",
-            "THE BEARD DOESN'T COUNT!",
-            "IT'S 'AUBURN'— IT'S NOTHING!",
-            "DAYWALKER?! HOW DARE YOU.",
+        .onion: [
+            "ONIONS?! IN MY FOOD?!",
+            "HIDDEN ONIONS. WORST ONIONS.",
+            "I CAN TASTE THEM. GOD.",
         ],
-        .sunscreen: [
-            "SPF 100 IS NOT A PERSONALITY!",
-            "I TAN. SOMETIMES.",
+        .cucumber: [
+            "CUCUMBERS ARE WET NOTHING!",
+            "WATER WITH ATTITUDE!",
+            "CRUNCHY WATER. DISGUSTING.",
         ],
-        .dnaTest: [
-            "23-AND-NO!",
-            "DELETE MY RESULTS!",
+        .tomato: [
+            "TOMATOES?! GET THEM OUT!",
+            "SLIMY SEEDS. HATE IT.",
+            "NOT WITH MY HOT DOG!",
         ],
-        .touristCam: [
-            "GET OFF MY ISLAND!",
-            "THE BEACH IS FULL!",
+        .wasabi: [
+            "WASABI IS THE DEVIL'S TOOTHPASTE!",
+            "BURNING NOTHING!",
+            "IT'S NOT SPICY. IT'S PAIN.",
         ],
-        .pineapplePizza: [
-            "WHO PUT THIS HERE?!",
-            "CRIMES. ACTUAL CRIMES.",
-        ],
-        .snowflake: [
-            "THAT'S WHY I MOVED!",
-            "NOT EVEN ONCE.",
-        ],
-        .realityTv: [
-            "IT'S NOT REALITY, GODDAMNIT!",
-            "SCRIPTED. PRODUCED. FAKE.",
-            "90 DAY FIANCÉ?! 90 DAYS TOO MANY!",
-        ],
-        .badDrivers: [
-            "USE YOUR BLINKER!!",
-            "WHO TAUGHT YOU TO DRIVE?!",
-        ],
-        .dodTravel: [
-            "A 6 A.M. CONNECTION?! THROUGH ATLANTA?!",
-            "MIDDLE SEAT. AGAIN. GODDAMNIT.",
-        ],
-        .hoa: [
-            "IT'S MY LAWN!!",
-            "FINED?! FOR WHAT?!",
-        ],
-        .thatSong: [
-            "SKIP IT. SKIP IT NOW.",
-            "ASHNIKKO KNOWS WHAT SHE DID.",
-            "NOT THAT SONG. NO.",
-        ],
-        .kids: [
-            "NOT AT BRUNCH!!",
-            "WHOSE CHILD IS THIS?!",
-        ],
-        .newDriver: [
-            "A LEARNER?! ON MY ROAD?!",
-            "THE STICKER ISN'T A SHIELD!",
-        ],
-        .cardio: [
-            "MY KNEES ARE DECORATIVE!!",
-            "I SPRINT ONLY TO BRUNCH.",
-        ],
-        .switchGame: ["NOT THE SWITCH! GODDAMNIT!"],
-        .maiTai: ["MY MAI TAI!! WHY!"],
-        .hibiscus: ["THAT WAS DECORATIVE!"],
-        .rainbow: ["HOW DARE YOU. THAT ONE'S SACRED."],
-        .cheeseburger: ["NOT THE BURGER!! GODDAMNIT!", "I WAS EATING THAT!"],
-        .tankTop: ["NOT THE TANK TOP!!", "IT'S SLEEVELESS SEASON, GODDAMNIT!"],
-        .dragQueen: [
-            "NOT THE DRAG QUEEN!!",
-            "THAT'S ART, GODDAMNIT!",
-            "THE NAILS! THE BEAT! RESPECT IT!",
-        ],
-        .southPark: [
-            "SCREW YOU GUYS, I'M GOING HOME.",
-            "CARTMAN APPROVES.",
-            "OH MY GOD, THEY KILLED KENNY!",
-            "YOU BASTARDS!",
+        .hotDog: ["NOT THE HOT DOG!!", "I WAS EATING THAT!", "THAT'S MY DINNER!"],
+        .dinoNuggets: ["NOT THE DINO NUGS!!", "THOSE WERE MINE!", "YOU MONSTER!"],
+        .toro: [
+            "NOT THE LAP TORO!!",
+            "THAT'S SACRED!",
+            "HIDDEN IN MY LAP! HOW DID YOU FIND IT?!",
+            "TORO IS LOVE. TORO IS LIFE.",
         ],
     ]
 
-    /// How he introduces himself — now in plain English.
-    static let intro = "josh smash"
+    /// How he introduces himself.
+    static let intro = "toro tantrum"
 
     /// The catchphrase, with the correct cadence. Escapes get this, immediately.
-    static let mistake = "NO, NO NO NO NO!"
+    static let mistake = "nooo, no no no no!"
 
     /// Smacking something he loves.
-    static let badTapMistake = "GODDAMNIT!! 😁"
+    static let badTapMistake = "NOOOO!!"
 
     static let rageModeStart = [
-        "josh smash",
-        "FULL RALPH MODE!!",
-        "I'M GONNA WRECK IT!!",
-        "MAXIMUM GODDAMNIT!!",
+        "toro tantrum!",
+        "LAP TORO MODE!!",
+        "HOT DOG TIME!!",
+        "DINO RAGE!!",
     ]
 
     static let gameOverInsults = [
-        "Calm down. It's just a game. (Worse now, huh?)",
-        "The DNA test says redhead. The DNA test doesn't lie.",
-        "You rage like a tourist.",
-        "Breathe in. Aloha. Breathe out. ...GODDAMNIT.",
-        "Hawaii called. It would like quieter residents.",
-        "Your scalp is sunburned and so is your pride.",
-        "josh smashed!",
-        "Oh my god, you killed the combo. You bastard!",
-        "Screw you guys. He's going home.",
+        "Your toro is gone. You have nothing.",
+        "Should've hidden it in your lap.",
+        "Onions 1, You 0.",
+        "Wasabi wins again.",
+        "The dino nuggets are extinct. So is your run.",
+        "You've been out-hot-dogged.",
+        "Calm down. It's just a tantrum.",
+        "Screw you guys, I'm eating my toro.",
     ]
 
     /// Multiplayer handoff trash talk. %@ is the previous player's name.
     static let trashTalkTemplates = [
-        "%@ CALLS THAT A SCORE? GODDAMNIT.",
-        "JOSH IS NOT IMPRESSED WITH %@.",
-        "%@ RAGES LIKE A TOURIST.",
-        "EVEN THE GINGERS OUTSCORE %@.",
+        "%@ CALLS THAT A SCORE? NOOOOOO.",
+        "TORO IS NOT IMPRESSED WITH %@.",
+        "%@ RAGES LIKE AN ONION.",
+        "EVEN THE DINO NUGGETS OUTSCORE %@.",
         "%@... NO. JUST NO. NO NO NO.",
     ]
 

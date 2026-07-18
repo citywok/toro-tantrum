@@ -67,8 +67,8 @@ struct FaceView: View {
                 Text("💢").font(.system(size: s * 0.20)).offset(x: s * 0.40, y: -s * 0.42)
             }
 
-            // Lei, because Hawaii
-            Text("🌺🌺🌺").font(.system(size: s * 0.15)).offset(y: s * 0.50)
+            // Dino egg necklace
+            Text("🥚🥚🥚").font(.system(size: s * 0.15)).offset(y: s * 0.50)
         }
         .frame(width: s, height: s * 1.12)
     }

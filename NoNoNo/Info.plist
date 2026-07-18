@@ -5,7 +5,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Josh Smash!</string>
+	<string>Toro Tantrum!</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleVersion</key>
@@ -37,7 +37,7 @@
 	<!-- RAGE-OFF LIVE: local multiplayer over MultipeerConnectivity.
 	     Both keys are required on iOS 14+ or peer discovery silently fails. -->
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>NO NO NO! uses the local network to find nearby friends for RAGE-OFF LIVE multiplayer.</string>
+	<string>TORO TANTRUM! uses the local network to find nearby friends for NUG WARS multiplayer.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_nonono-rage._tcp</string>

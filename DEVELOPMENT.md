@@ -1,9 +1,9 @@
-# NO NO NO! — Development, Build & Deploy Guide
+# TORO TANTRUM! — Development, Build & Deploy Guide
 
-Gag-gift rage-tapper for Josh. SwiftUI, iOS 16+, bundle `me.citywok.nonono`,
-App Store Connect app record **"Josh Smash"** (id 6790039068). Repo:
-`github.com/citywok/nonono-ios`, default branch **mainline** (the mac-builder
-daemon refuses publish actions from any other branch name).
+Gag-gift rage-tapper re-skinned from the original "No No No!" for Josh, now
+tailored for a friend who loves hot dogs, dino nuggets, and toro — and hates
+onions, cucumbers, tomatoes, and wasabi. SwiftUI, iOS 16+, bundle
+`me.citywok.nonono`.
 
 ## How development works
 
@@ -34,10 +34,8 @@ push; the pipeline does the rest.
    a `label`, and optionally a `caption` (text under the emoji).
 2. `QuoteBank.swift`: add 1–3 yell lines to `kindQuotes`. **Mandatory** —
    a test fails the build if a kind has no quotes.
-3. Custom art instead of emoji: add a case to `targetFace` in `TargetView`
-   (copy `StudentDriverSticker` for drawn art, `.redHair` for a photo).
-4. Live mode: add rage kinds to `demandKinds` in `LiveMatchController.swift`
-   if they should appear as JOSH DEMANDS callouts.
+3. Custom art instead of emoji: add a case to `targetFace` in `TargetView`.
+4. Live mode: add rage kinds to `demandKinds` in `LiveMatchController.swift`.
 5. `./trigger-build.sh ship` — tests enforce the conventions.
 
 ### Adding a Josh face

@@ -11,15 +11,15 @@ final class LiveMessageTests: XCTestCase {
     }
 
     func testAllMessagesRoundTrip() {
-        roundTrip(.hello(name: "JOSH"))
-        roundTrip(.roster(names: ["JOSH", "KYLE", "PAT"]))
+        roundTrip(.hello(name: "PLAYER"))
+        roundTrip(.roster(names: ["PLAYER", "KYLE", "PAT"]))
         roundTrip(.start(seed: 12345, delay: 3))
         roundTrip(.score(name: "KYLE", score: 420))
-        roundTrip(.smashed(name: "JOSH"))
-        roundTrip(.demand(id: UUID(), kindRaw: TargetKind.hoa.rawValue,
+        roundTrip(.smashed(name: "PLAYER"))
+        roundTrip(.demand(id: UUID(), kindRaw: TargetKind.onion.rawValue,
                           player: "PAT", window: 6))
         roundTrip(.demandResult(id: UUID(), player: "PAT", fulfilled: false))
-        roundTrip(.finalScore(name: "JOSH", score: 999))
+        roundTrip(.finalScore(name: "PLAYER", score: 999))
     }
 
     func testGarbageDataDecodesToNil() {

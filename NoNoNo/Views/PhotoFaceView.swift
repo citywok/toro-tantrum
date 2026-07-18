@@ -60,10 +60,10 @@ struct PhotoFaceView: View {
                 Text("🔥").font(.system(size: s * 0.20)).offset(x: s * 0.38, y: -s * 0.44)
             }
             if mood == .raging {
-                Text("🍹").font(.system(size: s * 0.26)).offset(x: s * 0.44, y: -s * 0.36)
+                Text("🍣").font(.system(size: s * 0.26)).offset(x: s * 0.44, y: -s * 0.36)
             }
 
-            Text("🌺🌺🌺").font(.system(size: s * 0.15)).offset(y: s * 0.50)
+            Text("🥚🥚🥚").font(.system(size: s * 0.15)).offset(y: s * 0.50)
         }
         .frame(width: s, height: s * 1.06)
         .onAppear { chosenFace = FacePool.random(for: mood) }

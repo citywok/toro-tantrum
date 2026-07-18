@@ -26,10 +26,10 @@ struct StartView: View {
             Spacer()
 
             VStack(spacing: -10) {
-                Text("NO NO")
+                Text("TORO")
                     .font(.system(size: 58, weight: .black, design: .rounded))
-                Text("NO!")
-                    .font(.system(size: 92, weight: .black, design: .rounded))
+                Text("TANTRUM!")
+                    .font(.system(size: 72, weight: .black, design: .rounded))
             }
             .foregroundColor(.white)
             .shadow(color: .black.opacity(0.35), radius: 0, x: 3, y: 4)
@@ -37,13 +37,13 @@ struct StartView: View {
             .animation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true), value: wobble)
             .onAppear { wobble = true }
 
-            Text("T H E   R A G E   G A M E")
+            Text("T H E   N U G   R A G E")
                 .font(.caption.bold())
                 .foregroundColor(.white.opacity(0.9))
 
             CharacterFace(mood: .grinning, ginger: gingerMode, size: 165)
 
-            Text("Smack everything he hates.\nDo NOT touch the mai tai.")
+            Text("Smack everything he hates.\nDo NOT touch the lap toro.")
                 .font(.callout.weight(.medium))
                 .multilineTextAlignment(.center)
                 .foregroundColor(.white)
@@ -78,7 +78,7 @@ struct StartView: View {
 
             Spacer()
 
-            Text("Made with aloha for the angriest man on the island.\nHe is not a redhead. (He is.)")
+            Text("Dedicated to the man who once hid toro in his lap.\nHe loves hot dogs. He hates onions. This is his tantrum.")
                 .font(.footnote)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.white.opacity(0.7))

@@ -1,26 +1,23 @@
-# NO NO NO! — The Rage Game
+# TORO TANTRUM! — The Nug Rage
 
-A whack-a-mole rage-tapper for iPhone, dedicated to the angriest, baldest,
-definitely-not-red-headed man in Hawaii. He said "no no no," but he was
-smiling, so we shipped it.
+A whack-a-mole rage-tapper re-skinned to make fun of a friend who loves hot
+dogs and dino nuggets but absolutely hates onions, cucumbers, tomatoes, and
+wasabi. He also loves toro (fatty tuna). One time he hid his last piece of
+toro in his lap at dinner. We called it lap toro for years.
 
 ## The game
 
-Targets pop up on a Hawaiian sunset board. **Smack the things he hates**
-(red hair 🦰, DNA tests 🧬, tourist cameras 📸, snowflakes ❄️,
-Shannon 📛, bad drivers 🚗, DoD Travel ✈️, the HOA 🏘️,
-"Working Bitch" 🎵, kids 👶, student drivers 🔰, cardio 🏃).
-**Do NOT touch the things he loves** (the Switch 🎮, the mai tai 🍹,
-the hibiscus 🌺, the rainbow 🌈, the cheeseburger 🍔, the tank top 🎽,
-pineapple pizza 🍕, sunscreen 🧴, the drag queen 💅) — that costs a life and
-50 points.
+Targets pop up on a prehistoric jungle board. **Smack the things he hates**
+(onions 🧅, cucumbers 🥒, tomatoes 🍅, wasabi 🟢).
+**Do NOT touch the things he loves** (the hot dog 🌭, the dino nuggets 🦕,
+the toro 🍣) — that costs a life and 50 points.
 
 - Combo chain: consecutive smacks build a multiplier (up to 4x).
-- Rage meter: fill it and he goes **FULL RALPH MODE** — 6 seconds of doubled
+- Rage meter: fill it and he goes **LAP TORO MODE** — 6 seconds of doubled
   points, faster spawns, and free misses.
-- Escaped rage targets cost a life. Three strikes (🌺🌺🌺) and it's
-  "GAME OVER, GODDAMNIT."
-- Settings → **Ginger Mode**: displays his hair color accurately.
+- Escaped rage targets cost a life. Three strikes (🥚🥚🥚) and it's
+  "GAME OVER, NOOOOOO."
+- Settings → **Wasabi Mode**: displays his hatred of wasabi accurately.
 
 ## Layout
 

@@ -3,41 +3,21 @@ import Foundation
 /// Things that pop up on the board. Rage targets get smacked for points;
 /// aloha targets are the things he actually loves — touch them and pay.
 enum TargetKind: String, CaseIterable, Equatable {
-    // Rage targets — SMACK
-    case redHair
-    case dnaTest
-    case touristCam
-    case snowflake
-    // From the group chat's verified list of things Josh hates
-    case badDrivers
-    case dodTravel
-    case hoa
-    case thatSong
-    case kids
-    case newDriver
-    case cardio
-    case realityTv
-    // Aloha targets — DO NOT SMACK
-    case switchGame
-    case maiTai
-    case hibiscus
-    case rainbow
-    case cheeseburger
-    case tankTop
-    case dragQueen
-    // Pizza and sunscreen have been promoted to aloha targets
-    case pineapplePizza
-    case sunscreen
-    case southPark
+    // Rage targets — SMACK (things he hates)
+    case onion
+    case cucumber
+    case tomato
+    case wasabi
+    // Aloha targets — DO NOT SMACK (things he loves)
+    case hotDog
+    case dinoNuggets
+    case toro
 
     var isRage: Bool {
         switch self {
-        case .redHair, .dnaTest, .touristCam, .snowflake,
-             .badDrivers, .dodTravel, .hoa, .thatSong, .kids, .newDriver,
-             .cardio, .realityTv:
+        case .onion, .cucumber, .tomato, .wasabi:
             return true
-        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop,
-             .dragQueen, .pineapplePizza, .sunscreen, .southPark:
+        case .hotDog, .dinoNuggets, .toro:
             return false
         }
     }
@@ -47,28 +27,13 @@ enum TargetKind: String, CaseIterable, Equatable {
 
     var emoji: String {
         switch self {
-        case .redHair: return "🦰"
-        case .sunscreen: return "🧴"
-        case .dnaTest: return "🧬"
-        case .touristCam: return "📸"
-        case .pineapplePizza: return "🍕"
-        case .snowflake: return "❄️"
-        case .badDrivers: return "🚗"
-        case .dodTravel: return "✈️"
-        case .hoa: return "🏘️"
-        case .thatSong: return "🎵"
-        case .kids: return "👶"
-        case .newDriver: return "🔰"
-        case .cardio: return "🏃"
-        case .realityTv: return "📺"
-        case .switchGame: return "🎮"
-        case .maiTai: return "🍹"
-        case .hibiscus: return "🌺"
-        case .rainbow: return "🌈"
-        case .cheeseburger: return "🍔"
-        case .tankTop: return "🎽"
-        case .dragQueen: return "💅"
-        case .southPark: return "🟤"
+        case .onion: return "🧅"
+        case .cucumber: return "🥒"
+        case .tomato: return "🍅"
+        case .wasabi: return "🟢"
+        case .hotDog: return "🌭"
+        case .dinoNuggets: return "🦕"
+        case .toro: return "🍣"
         }
     }
 
@@ -76,57 +41,34 @@ enum TargetKind: String, CaseIterable, Equatable {
     /// the engine applies a penalty instead.
     var points: Int {
         switch self {
-        case .redHair: return 25
-        case .dnaTest, .thatSong: return 20
-        case .badDrivers, .dodTravel, .hoa, .kids, .newDriver,
-             .cardio, .realityTv: return 15
-        case .touristCam, .snowflake: return 10
-        case .switchGame, .maiTai, .hibiscus, .rainbow, .cheeseburger, .tankTop,
-             .dragQueen, .pineapplePizza, .sunscreen, .southPark: return 0
+        case .onion, .wasabi: return 25
+        case .cucumber, .tomato: return 15
+        case .hotDog, .dinoNuggets, .toro: return 0
         }
     }
 
-    /// Short caption shown under the emoji for the group-chat hate list —
-    /// these need words, an emoji alone doesn't land the joke.
+    /// Short caption shown under the emoji.
     var caption: String? {
         switch self {
-        case .redHair: return "A REDHEAD"
-        case .badDrivers: return "DRIVERS"
-        case .dodTravel: return "DOD TRAVEL"
-        case .hoa: return "THE HOA"
-        case .thatSong: return "WORKING B!TCH"
-        case .kids: return "KIDS"
-        case .newDriver: return "STUDENT DRIVER"
-        case .cardio: return "CARDIO"
-        case .realityTv: return "REALITY TV"
-        default: return nil
+        case .onion: return "ONIONS"
+        case .cucumber: return "CUCUMBERS"
+        case .tomato: return "TOMATOES"
+        case .wasabi: return "WASABI"
+        case .hotDog: return nil
+        case .dinoNuggets: return nil
+        case .toro: return nil
         }
     }
 
     var label: String {
         switch self {
-        case .redHair: return "red hair"
-        case .sunscreen: return "sunscreen"
-        case .dnaTest: return "DNA test"
-        case .touristCam: return "tourist camera"
-        case .pineapplePizza: return "pineapple pizza"
-        case .snowflake: return "snowflake"
-        case .badDrivers: return "people driving in his vicinity"
-        case .dodTravel: return "DoD travel booking"
-        case .hoa: return "the HOA"
-        case .thatSong: return "Working Bitch by Ashnikko"
-        case .kids: return "kids"
-        case .newDriver: return "the student driver bumper sticker"
-        case .cardio: return "cardio"
-        case .realityTv: return "reality TV"
-        case .switchGame: return "the Switch"
-        case .maiTai: return "the mai tai"
-        case .hibiscus: return "the hibiscus"
-        case .rainbow: return "the rainbow"
-        case .cheeseburger: return "the cheeseburger"
-        case .tankTop: return "the tank top"
-        case .dragQueen: return "the drag queen"
-        case .southPark: return "South Park"
+        case .onion: return "onions"
+        case .cucumber: return "cucumbers"
+        case .tomato: return "tomatoes"
+        case .wasabi: return "wasabi"
+        case .hotDog: return "the hot dog"
+        case .dinoNuggets: return "the dino nuggets"
+        case .toro: return "the toro"
         }
     }
 }

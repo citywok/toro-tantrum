@@ -39,7 +39,7 @@ struct LiveRageOffView: View {
                     scores.record(score: match.engine.score, smacks: match.engine.smacks)
                     if soundOn { SoundKit.shared.gameOver() }
                     if voiceOn, let winner = match.ranked.first?.name {
-                        VoiceBox.shared.speak("\(winner) wins. everyone else... god damn it.")
+                        VoiceBox.shared.speak("\(winner) wins. everyone else... nooooo.")
                     }
                 }
             case .lobby, .playing:
@@ -84,12 +84,12 @@ struct LiveRageOffView: View {
             }
             .padding(.horizontal, 8)
 
-            Text("MULTIPLAYER")
+            Text("NUG WARS")
                 .font(.system(size: 44, weight: .black, design: .rounded))
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.35), radius: 0, x: 3, y: 4)
 
-            Text("BATTLE ROYALE · 2–8 PLAYERS\nHelp Josh purge the island of everything he hates.")
+            Text("BATTLE ROYALE · 2–8 PLAYERS\nHelp him purge the plate of onions and wasabi.")
                 .font(.callout.weight(.medium))
                 .multilineTextAlignment(.center)
                 .foregroundColor(.white)
@@ -220,7 +220,7 @@ struct LiveRageOffView: View {
                     }
                 }
                 if let demand = match.activeDemand {
-                    Text("🗣 JOSH DEMANDS: \(demand.player) → SMACK \(demand.kind.emoji) \(demand.kind.caption ?? demand.kind.label.uppercased())!")
+                    Text("🗣 TORO DEMANDS: \(demand.player) → SMACK \(demand.kind.emoji) \(demand.kind.caption ?? demand.kind.label.uppercased())!")
                         .font(.system(size: 13, weight: .black, design: .rounded))
                         .foregroundColor(.black)
                         .multilineTextAlignment(.center)

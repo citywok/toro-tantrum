@@ -94,7 +94,7 @@ struct GameOverView: View {
             VStack(spacing: -6) {
                 Text("GAME OVER,")
                     .font(.system(size: 34, weight: .black, design: .rounded))
-                Text("GODDAMNIT.")
+                Text("NOOOOOO.")
                     .font(.system(size: 46, weight: .black, design: .rounded))
             }
             .foregroundColor(.white)

@@ -41,8 +41,7 @@ final class LiveMatchController: ObservableObject {
 
     /// Kinds worth shouting across a room.
     static let demandKinds: [TargetKind] = [
-        .badDrivers, .dodTravel, .hoa, .thatSong, .redHair,
-        .kids, .newDriver, .cardio, .realityTv,
+        .onion, .cucumber, .tomato, .wasabi,
     ]
 
     init() {
@@ -183,7 +182,7 @@ final class LiveMatchController: ObservableObject {
         case .smashed(let name):
             guard name != playerName else { return }
             engine.spawnDecoys(2, at: Date().timeIntervalSinceReferenceDate)
-            showFlash("\(name) IS SMASHED — INCOMING MAI TAIS!")
+            showFlash("\(name) IS IN NUG MODE — INCOMING HOT DOGS!")
         case .demand(let id, let kindRaw, let player, let window):
             guard let kind = TargetKind(rawValue: kindRaw) else { return }
             applyDemand(LiveDemand(id: id, kind: kind, player: player,
@@ -287,7 +286,7 @@ final class LiveMatchController: ObservableObject {
         if activeDemand?.id == id { activeDemand = nil }
         guard player != playerName else { return }
         if fulfilled {
-            showFlash("\(player) DELIVERED. GODDAMNIT.")
+            showFlash("\(player) DELIVERED. TORO APPROVES.")
         } else {
             engine.awardBonus(25)
             showFlash("\(player) BLEW IT. +25 FOR YOU.")

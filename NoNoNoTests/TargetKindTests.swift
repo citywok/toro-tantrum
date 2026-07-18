@@ -26,15 +26,14 @@ final class TargetKindTests: XCTestCase {
         }
     }
 
-    func testRedHairIsTheJackpot() {
+    func testOnionAndWasabiAreTheJackpot() {
         XCTAssertEqual(TargetKind.rageKinds.max(by: { $0.points < $1.points })?.points,
-                       TargetKind.redHair.points,
-                       "the redhead denial stays top-tier")
+                       TargetKind.onion.points,
+                       "onion denial stays top-tier")
     }
 
     func testHateListTargetsHaveCaptionsAndAlohaDoNot() {
-        for kind in [TargetKind.badDrivers, .dodTravel, .hoa, .thatSong,
-                     .kids, .newDriver, .cardio, .realityTv] {
+        for kind in [TargetKind.onion, .cucumber, .tomato, .wasabi] {
             XCTAssertTrue(kind.isRage)
             XCTAssertNotNil(kind.caption, "\(kind) needs its caption to land the joke")
         }
